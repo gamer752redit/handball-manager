@@ -745,13 +745,41 @@
                 const data = await response.json();
                 libraryFiles = (data.tree || []).filter(item => item.type === 'blob' && item.path.endsWith('.json'))
                     .map(item => ({ path: item.path, name: item.path.split('/').pop() }));
+                
+                // Load shot counts for all files
+                libraryFileShotCounts = {};
+                status.textContent = 'Lade Spieldaten...';
+                for (const file of libraryFiles) {
+                    await fetchFileShotCount(file.path, file.name);
+                }
+                
                 libraryLoaded = true;
                 renderLibraryList();
                 status.textContent = `${libraryFiles.length} Dateien gefunden.`;
             } catch (err) {
                 libraryFiles = [];
+                libraryFileShotCounts = {};
                 status.textContent = 'Fehler beim Laden der Cloud-Library.';
                 showToast(err.message || 'Cloud-Library konnte nicht geladen werden.', 'error');
+            }
+        }
+
+        async function fetchFileShotCount(path, name) {
+            try {
+                const url = `https://raw.githubusercontent.com/${GITHUB_LIBRARY.owner}/${GITHUB_LIBRARY.repo}/${GITHUB_LIBRARY.branch}/${path}`;
+                const response = await fetch(url);
+                if (!response.ok) {
+                    console.warn(`Konnte Datei nicht laden: ${path} (${response.status})`);
+                    libraryFileShotCounts[name] = 0;
+                    return;
+                }
+                const data = await response.json();
+                const count = Array.isArray(data.shots) ? data.shots.length : 0;
+                libraryFileShotCounts[name] = count;
+                console.log(`Datei ${name}: ${count} Tore`);
+            } catch (err) {
+                console.error(`Fehler beim Laden von ${name}:`, err);
+                libraryFileShotCounts[name] = 0;
             }
         }
 
@@ -769,11 +797,10 @@
             const modal = document.getElementById('library-modal');
             modal.classList.add('active');
             document.getElementById('library-search').value = '';
-            if (!libraryLoaded) {
-                fetchLibraryFiles();
-            } else {
-                renderLibraryList();
-            }
+            // Reset cache and always reload latest data
+            libraryFileShotCounts = {};
+            libraryLoaded = false;
+            fetchLibraryFiles();
         }
 
         function closeLibrary() {
@@ -817,7 +844,7 @@
                     return sum + (libraryFileShotCounts[file.name] || 0);
                 }, 0);
                 
-                title.textContent = `Gruppe: ${groupName} | Gesamt Tore: ${totalGoals}`;
+                title.textContent = `Gruppe: ${groupName} | Gesamt: ${totalGoals} Tor${totalGoals !== 1 ? 'e' : ''}`;
                 groupEl.appendChild(title);
 
                 groups[groupName].forEach(file => {
