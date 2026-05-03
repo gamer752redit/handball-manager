@@ -681,6 +681,18 @@
         </div>
     </div>
 
+    <!-- Shot Sequence Modal -->
+    <div class="modal-overlay library-modal" id="sequence-modal">
+        <div class="modal-card">
+            <h2 id="sequence-title">Torfolge</h2>
+            <p class="text-secondary">Alle Tore in zeitlicher Reihenfolge</p>
+            <div class="library-list" id="sequence-list" style="max-height: 60vh; margin-bottom: 1rem;"></div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeSequence()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         /**
          * State Management
@@ -693,7 +705,7 @@
 
         let libraryFiles = [];
         let libraryLoaded = false;
-        let libraryFileShotCounts = {}; // Cache for shot counts: { 'filename': count }
+        let libraryFileShotCounts = {}; // Cache: { 'filename': { count: N, goal30: num, goal40: num, shots: [...] } }
 
         let state = {
             shots: [], // { x: %, y: %, number: string, timestamp: number }
@@ -770,16 +782,25 @@
                 const response = await fetch(url);
                 if (!response.ok) {
                     console.warn(`Konnte Datei nicht laden: ${path} (${response.status})`);
-                    libraryFileShotCounts[name] = 0;
+                    libraryFileShotCounts[name] = { count: 0, goal30: 'n/a', goal40: 'n/a', shots: [] };
                     return;
                 }
                 const data = await response.json();
-                const count = Array.isArray(data.shots) ? data.shots.length : 0;
-                libraryFileShotCounts[name] = count;
-                console.log(`Datei ${name}: ${count} Tore`);
+                const shots = Array.isArray(data.shots) ? data.shots : [];
+                const count = shots.length;
+                const goal30 = count >= 30 ? shots[29].number : 'n/a';
+                const goal40 = count >= 40 ? shots[39].number : 'n/a';
+                
+                libraryFileShotCounts[name] = {
+                    count: count,
+                    goal30: goal30,
+                    goal40: goal40,
+                    shots: shots
+                };
+                console.log(`Datei ${name}: ${count} Tore (30.: ${goal30}, 40.: ${goal40})`);
             } catch (err) {
                 console.error(`Fehler beim Laden von ${name}:`, err);
-                libraryFileShotCounts[name] = 0;
+                libraryFileShotCounts[name] = { count: 0, goal30: 'n/a', goal40: 'n/a', shots: [] };
             }
         }
 
@@ -840,23 +861,51 @@
                 const title = document.createElement('h3');
                 
                 // Calculate total goals for this group
-                const totalGoals = groups[groupName].reduce((sum, file) => {
-                    return sum + (libraryFileShotCounts[file.name] || 0);
+                const groupFiles = groups[groupName];
+                const totalGoals = groupFiles.reduce((sum, file) => {
+                    return sum + (libraryFileShotCounts[file.name]?.count || 0);
                 }, 0);
                 
                 title.textContent = `Gruppe: ${groupName} | Gesamt: ${totalGoals} Tor${totalGoals !== 1 ? 'e' : ''}`;
+                
+                // Add goal 30/40 info
+                const infoEl = document.createElement('p');
+                infoEl.style.fontSize = '0.85rem';
+                infoEl.style.color = 'var(--text-sec)';
+                infoEl.style.marginBottom = '0.75rem';
+                const goal30List = groupFiles.map(f => libraryFileShotCounts[f.name]?.goal30 || 'n/a').filter(g => g !== 'n/a');
+                const goal40List = groupFiles.map(f => libraryFileShotCounts[f.name]?.goal40 || 'n/a').filter(g => g !== 'n/a');
+                infoEl.textContent = `30. Tor: ${goal30List.join(', ') || 'n/a'} | 40. Tor: ${goal40List.join(', ') || 'n/a'}`;
+                
                 groupEl.appendChild(title);
+                groupEl.appendChild(infoEl);
 
-                groups[groupName].forEach(file => {
+                groupFiles.forEach(file => {
                     const item = document.createElement('div');
                     item.className = 'library-item';
-                    item.onclick = () => loadLibraryFile(file.path);
                     const halfNum = getLibraryHalf(file.name);
-                    const goalCount = libraryFileShotCounts[file.name] || 0;
-                    item.innerHTML = `
+                    const goalCount = libraryFileShotCounts[file.name]?.count || 0;
+                    
+                    const itemContent = document.createElement('div');
+                    itemContent.style.flex = '1';
+                    itemContent.style.cursor = 'pointer';
+                    itemContent.onclick = () => loadLibraryFile(file.path);
+                    itemContent.innerHTML = `
                         <span class="item-name">${file.name}</span>
                         <span class="item-meta">halb ${halfNum} • ${goalCount} Tor${goalCount !== 1 ? 'e' : ''}</span>
                     `;
+                    item.appendChild(itemContent);
+                    
+                    const seqBtn = document.createElement('button');
+                    seqBtn.className = 'btn btn-small';
+                    seqBtn.textContent = 'Reihenfolge';
+                    seqBtn.style.marginLeft = '0.5rem';
+                    seqBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        openShotSequence(file.name);
+                    };
+                    item.appendChild(seqBtn);
+                    
                     groupEl.appendChild(item);
                 });
                 listContainer.appendChild(groupEl);
@@ -890,6 +939,41 @@
                 status.textContent = 'Fehler beim Laden der Datei.';
                 showToast(err.message || 'Datei konnte nicht importiert werden.', 'error');
             }
+        }
+
+        function openShotSequence(fileName) {
+            const data = libraryFileShotCounts[fileName];
+            if (!data || !data.shots || data.shots.length === 0) {
+                showToast('Keine Schüsse für diese Datei gefunden.', 'warning');
+                return;
+            }
+            
+            const modal = document.getElementById('sequence-modal');
+            const seqList = document.getElementById('sequence-list');
+            const seqTitle = document.getElementById('sequence-title');
+            seqTitle.textContent = `Torfolge: ${fileName}`;
+            seqList.innerHTML = '';
+            
+            data.shots.forEach((shot, index) => {
+                const item = document.createElement('div');
+                item.style.padding = '0.75rem';
+                item.style.borderBottom = '1px solid #f2f2f7';
+                item.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 600;">Tor ${index + 1}</span>
+                        <span style="color: var(--accent-color); font-weight: 600;">Nummer ${shot.number}</span>
+                        <span style="font-size: 0.9rem; color: var(--text-sec);">${shot.time || 'Uhrzeit n/a'}</span>
+                    </div>
+                `;
+                seqList.appendChild(item);
+            });
+            
+            modal.classList.add('active');
+        }
+        
+        function closeSequence() {
+            const modal = document.getElementById('sequence-modal');
+            modal.classList.remove('active');
         }
 
         /**
@@ -1090,7 +1174,8 @@
                     x: tempShot.x.toFixed(2), // Keep 2 decimals
                     y: tempShot.y.toFixed(2),
                     number: num,
-                    timestamp: Date.now()
+                    timestamp: Date.now(), // Current time in milliseconds
+                    time: new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) // HH:MM:SS
                 });
                 persistState();
                 render();
