@@ -1,0 +1,1245 @@
+<head>
+  <link rel="icon" type="image/png" href="https://www.asv-suechteln.de/wp-content/uploads/2022/03/2022-ASV-Logo-1.png">
+  
+  <link rel="apple-touch-icon" href="https://www.asv-suechteln.de/wp-content/uploads/2022/03/2022-ASV-Logo-1.png">
+</head>
+
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Handball Shot Analysis Pro</title>
+    <style>
+        :root {
+            --bg-color: #f5f5f7;
+            --accent-color: #007AFF;
+            --warn-color: #ff3b30;
+            --text-main: #1d1d1f;
+            --text-sec: #86868b;
+            --font-stack: -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --card-radius: 18px;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none; /* Prevent text selection for app-like feel */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-stack);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Typography */
+        h1, h2, h3 { font-weight: 700; }
+        .text-secondary { color: var(--text-sec); font-size: 0.9rem; }
+
+        /* Gatekeeper Login */
+        #login-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .login-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            width: 90%;
+            max-width: 350px;
+            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+        }
+
+        .login-card h1 { margin-bottom: 0.5rem; }
+        
+        .pin-input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 2rem;
+            text-align: center;
+            letter-spacing: 0.5rem;
+            border: 2px solid #e5e5ea;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+            outline: none;
+            transition: border-color 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            user-select: auto;
+            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+        }
+        
+        .pin-input:focus { border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1); }
+
+        /* Dashboard layout */
+        #dashboard {
+            display: none;
+            padding: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            padding-bottom: 100px;
+            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        #dashboard.active {
+            display: block;
+        }
+
+        .header {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-top: 1rem;
+        }
+
+        .library-launcher {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .library-launcher .btn {
+            padding: 0.9rem 1rem;
+            font-size: 0.95rem;
+            background: #007AFF;
+            color: white;
+            box-shadow: 0 8px 25px rgba(0, 122, 255, 0.18);
+        }
+
+        .stat-badge {
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            font-weight: 600;
+            color: var(--accent-color);
+            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s both;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Goal Area (3:2 ratio) */
+        .goal-container {
+            background: white;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+        }
+
+        .goal-frame {
+            width: 100%;
+            aspect-ratio: 3 / 2;
+            border: 6px solid #d1d1d6; /* Goal posts */
+            border-bottom: none;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(0,0,0,0.03) 10px,
+                rgba(0,0,0,0.03) 12px
+            ), repeating-linear-gradient(
+                -45deg,
+                transparent,
+                transparent 10px,
+                rgba(0,0,0,0.03) 10px,
+                rgba(0,0,0,0.03) 12px
+            );
+            position: relative;
+            cursor: crosshair;
+            overflow: hidden;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .goal-line {
+            height: 4px;
+            background: #d1d1d6;
+            width: 100%;
+        }
+
+        .marker {
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 700;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 2px 5px rgba(0,122,255,0.4);
+            pointer-events: auto;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Top Scorer List */
+        .ranking-card {
+            background: white;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+        }
+
+        .ranking-card h2 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .ranking-list {
+            list-style: none;
+        }
+
+        .ranking-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #f2f2f7;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .ranking-item:last-child { border-bottom: none; }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .jersey-badge {
+            width: 36px;
+            height: 36px;
+            background: #f2f2f7;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .shot-count {
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .note-card {
+            background: white;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+        }
+
+        .note-card h2 {
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .ranking-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.5rem;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .btn-small {
+            padding: 0.55rem 0.75rem;
+            font-size: 0.85rem;
+            border-radius: 10px;
+            min-width: 100px;
+            background: #f2f2f7;
+            color: var(--text-main);
+            box-shadow: none;
+        }
+
+        .btn-small:hover {
+            background: #e8e8ec;
+        }
+
+        .btn-hide {
+            background: rgba(255, 59, 48, 0.08);
+            color: var(--warn-color);
+        }
+
+        .btn-hide:hover {
+            background: rgba(255, 59, 48, 0.14);
+        }
+
+        .library-modal .modal-card {
+            max-width: 520px;
+        }
+
+        .library-modal .modal-input,
+        .library-modal .search-input {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            font-size: 1rem;
+            border: 2px solid #e5e5ea;
+            border-radius: 14px;
+            margin-bottom: 1rem;
+            outline: none;
+            resize: vertical;
+            min-height: 44px;
+        }
+
+        .library-modal .search-input:focus,
+        .library-modal .modal-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+
+        .library-list {
+            max-height: 50vh;
+            overflow-y: auto;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .library-group {
+            border: 1px solid #f2f2f7;
+            padding: 1rem;
+            border-radius: 16px;
+            background: #fafafa;
+        }
+
+        .library-group h3 {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .library-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 14px;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .library-item:hover {
+            background: #f2f2f7;
+        }
+
+        .library-item .item-name {
+            flex: 1;
+            text-align: left;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .library-item .item-meta {
+            font-size: 0.87rem;
+            color: var(--text-sec);
+            white-space: nowrap;
+        }
+
+        /* Controls */
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
+        }
+
+        .btn {
+            padding: 1rem;
+            border-radius: 12px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .btn:active { transform: scale(0.95); opacity: 0.8; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        
+        .btn-export { background: white; color: var(--accent-color); }
+        .btn-import { background: white; color: var(--text-main); }
+        .btn-reset { 
+            grid-column: span 2; 
+            background: rgba(255, 59, 48, 0.1); 
+            color: var(--warn-color); 
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            width: 90%;
+            max-width: 320px;
+            text-align: center;
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .modal-overlay.active .modal-card { transform: scale(1); }
+
+        .modal-input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.5rem;
+            text-align: center;
+            border: 2px solid #e5e5ea;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            outline: none;
+            user-select: auto;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .modal-input:focus { border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1); }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-cancel { flex: 1; background: #f2f2f7; color: var(--text-main); transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .btn-save { flex: 1; background: var(--accent-color); color: white; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        
+        .btn-cancel:hover { background: #e5e5ea; transform: translateY(-2px); }
+        .btn-save:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 122, 255, 0.3); }
+
+        /* Hidden file input for import */
+        #file-import { display: none; }
+
+        /* Toast Notification System */
+        #toast-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            pointer-events: auto;
+            cursor: pointer;
+            max-width: 280px;
+            word-wrap: break-word;
+        }
+
+        .toast.success {
+            background: rgba(52, 168, 83, 0.9);
+        }
+
+        .toast.error {
+            background: rgba(255, 59, 48, 0.9);
+        }
+
+        .toast.warning {
+            background: rgba(255, 159, 64, 0.9);
+        }
+
+        .toast.exit {
+            animation: slideUpOut 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* Particle Container */
+        #particle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* Morphing / Fluid Layouts */
+        @keyframes slideDownIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUpOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+        }
+
+        .ranking-item {
+            animation: slideDownIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .marker {
+            animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* Smooth content transitions */
+        * {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Particle Container -->
+    <div id="particle-container"></div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" onclick="focusPin()">
+        <div class="login-card">
+            <h1>Scouting Pro</h1>
+            <p class="text-secondary">Eingabe PIN erforderlich</p>
+            <input type="password" id="pin-input" class="pin-input" maxlength="4" pattern="\d*" inputmode="numeric">
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard">
+        <div class="header">
+            <div class="library-launcher">
+                <button class="btn btn-export" onclick="openLibrary()">Cloud Library</button>
+            </div>
+            <h2>Live Analyse</h2>
+            <div class="stat-badge">
+                Würfe: <span id="total-shots">0</span>
+            </div>
+        </div>
+
+        <div class="goal-container">
+            <p class="text-secondary" style="margin-bottom: 0.5rem; text-align: center;">Torfläche antippen für Marker, Doppelklick auf Marker zum Entfernen</p>
+            <div class="goal-frame" id="goal-frame">
+                <!-- Markers go here -->
+            </div>
+            <div class="goal-line"></div>
+        </div>
+
+        <div class="ranking-card">
+            <h2>Top Scorer</h2>
+            <ul class="ranking-list" id="ranking-list">
+                <!-- Dynamic ranking items -->
+            </ul>
+        </div>
+
+        <div class="note-card">
+            <h2>Spielnotiz</h2>
+            <textarea id="game-note" class="modal-input" placeholder="Optionale Anmerkung für dieses Spiel"></textarea>
+            <button class="btn btn-save" onclick="saveGameNote()">Notiz speichern</button>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-export" onclick="exportData()">Daten Exportieren</button>
+            <button class="btn btn-import" onclick="document.getElementById('file-import').click()">Daten Importieren</button>
+            <button class="btn btn-reset" onclick="resetFilters()">Filter zurücksetzen</button>
+            <button class="btn btn-reset" onclick="hardReset()">Hard-Reset (Löschen)</button>
+        </div>
+        <input type="file" id="file-import" accept=".json" onchange="importData(event)">
+    </div>
+
+    <!-- Number Input Modal -->
+    <div class="modal-overlay" id="number-modal">
+        <div class="modal-card">
+            <h2>Rückennummer</h2>
+            <p class="text-secondary">Gegnerischen Werfer eingeben</p>
+            <input type="number" id="jersey-input" class="modal-input" pattern="\d*" inputmode="numeric">
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeModal()">Abbrechen</button>
+                <button class="btn btn-save" onclick="saveShot()">Speichern</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="delete-modal">
+        <div class="modal-card">
+            <h2>Tor entfernen</h2>
+            <p class="text-secondary">Geben Sie die Nummer ein, um den Marker zu löschen</p>
+            <input type="number" id="delete-confirm-input" class="modal-input" pattern="\d*" inputmode="numeric">
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeDeleteModal()">Abbrechen</button>
+                <button class="btn btn-save" onclick="confirmRemoveShot()">Löschen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cloud Library Modal -->
+    <div class="modal-overlay library-modal" id="library-modal">
+        <div class="modal-card">
+            <h2>Cloud Library</h2>
+            <p class="text-secondary">Alle verfügbaren Spiele aus dem Repository laden</p>
+            <input type="text" id="library-search" class="search-input" placeholder="Nach Spielnamen suchen..." oninput="renderLibraryList()">
+            <div id="library-status" class="text-secondary" style="margin-bottom: 1rem; font-size: 0.95rem;"></div>
+            <div class="library-list" id="library-list"></div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeLibrary()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * State Management
+         */
+        const GITHUB_LIBRARY = {
+            owner: 'gamer752redit',
+            repo: 'handball-manager',
+            branch: 'main'
+        };
+
+        let libraryFiles = [];
+        let libraryLoaded = false;
+
+        let state = {
+            shots: [], // { x: %, y: %, number: string, timestamp: number }
+            gameNote: '',
+            filters: {
+                showOnly: null,
+                hiddenNumbers: []
+            }
+        };
+
+        let tempShot = null; // Store coords temporarily while modal is open
+        let pendingDeleteIndex = null;
+
+        // Load from LocalStorage
+        function loadState() {
+            const saved = localStorage.getItem('handball_shots');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    state = {
+                        shots: Array.isArray(parsed.shots) ? parsed.shots : [],
+                        gameNote: parsed.gameNote || '',
+                        filters: {
+                            showOnly: parsed.filters && parsed.filters.showOnly ? parsed.filters.showOnly : null,
+                            hiddenNumbers: Array.isArray(parsed.filters && parsed.filters.hiddenNumbers) ? parsed.filters.hiddenNumbers : []
+                        }
+                    };
+                } catch (e) {
+                    console.error("Error loading data", e);
+                }
+            }
+        }
+
+        // Save to LocalStorage
+        function persistState() {
+            localStorage.setItem('handball_shots', JSON.stringify(state));
+        }
+
+        async function fetchLibraryFiles() {
+            const status = document.getElementById('library-status');
+            status.textContent = 'Lade Dateiliste...';
+
+            const api = `https://api.github.com/repos/${GITHUB_LIBRARY.owner}/${GITHUB_LIBRARY.repo}/git/trees/${GITHUB_LIBRARY.branch}?recursive=1`;
+            try {
+                const response = await fetch(api);
+                if (!response.ok) {
+                    throw new Error(`GitHub API Fehler: ${response.status}`);
+                }
+                const data = await response.json();
+                libraryFiles = (data.tree || []).filter(item => item.type === 'blob' && item.path.endsWith('.json'))
+                    .map(item => ({ path: item.path, name: item.path.split('/').pop() }));
+                libraryLoaded = true;
+                renderLibraryList();
+                status.textContent = `${libraryFiles.length} Dateien gefunden.`;
+            } catch (err) {
+                libraryFiles = [];
+                status.textContent = 'Fehler beim Laden der Cloud-Library.';
+                showToast(err.message || 'Cloud-Library konnte nicht geladen werden.', 'error');
+            }
+        }
+
+        function getLibraryGroup(name) {
+            const matchDate = name.match(/(\d+-mai-\d{2})/i);
+            return matchDate ? matchDate[1].toLowerCase() : 'unbekannte gruppe';
+        }
+
+        function getLibraryHalf(name) {
+            const matchHalf = name.match(/halb(\d+)/i);
+            return matchHalf ? parseInt(matchHalf[1], 10) : 0;
+        }
+
+        function openLibrary() {
+            const modal = document.getElementById('library-modal');
+            modal.classList.add('active');
+            document.getElementById('library-search').value = '';
+            if (!libraryLoaded) {
+                fetchLibraryFiles();
+            } else {
+                renderLibraryList();
+            }
+        }
+
+        function closeLibrary() {
+            const modal = document.getElementById('library-modal');
+            modal.classList.remove('active');
+        }
+
+        function renderLibraryList() {
+            const filter = document.getElementById('library-search').value.trim().toLowerCase();
+            const listContainer = document.getElementById('library-list');
+            listContainer.innerHTML = '';
+
+            const filtered = libraryFiles
+                .filter(file => file.name.toLowerCase().includes(filter))
+                .sort((a, b) => {
+                    const groupA = getLibraryGroup(a.name);
+                    const groupB = getLibraryGroup(b.name);
+                    if (groupA !== groupB) return groupA.localeCompare(groupB, 'de');
+                    return getLibraryHalf(a.name) - getLibraryHalf(b.name);
+                });
+
+            const groups = filtered.reduce((acc, file) => {
+                const group = getLibraryGroup(file.name);
+                if (!acc[group]) acc[group] = [];
+                acc[group].push(file);
+                return acc;
+            }, {});
+
+            if (filtered.length === 0) {
+                listContainer.innerHTML = '<div class="text-secondary" style="padding: 1rem; text-align:center;">Keine Dateien gefunden.</div>';
+                return;
+            }
+
+            Object.keys(groups).sort().forEach(groupName => {
+                const groupEl = document.createElement('div');
+                groupEl.className = 'library-group';
+                const title = document.createElement('h3');
+                title.textContent = `Gruppe: ${groupName}`;
+                groupEl.appendChild(title);
+
+                groups[groupName].forEach(file => {
+                    const item = document.createElement('div');
+                    item.className = 'library-item';
+                    item.onclick = () => loadLibraryFile(file.path);
+                    item.innerHTML = `
+                        <span class="item-name">${file.name}</span>
+                        <span class="item-meta">halb ${getLibraryHalf(file.name)}</span>
+                    `;
+                    groupEl.appendChild(item);
+                });
+                listContainer.appendChild(groupEl);
+            });
+        }
+
+        async function loadLibraryFile(path) {
+            const status = document.getElementById('library-status');
+            status.textContent = `Lade ${path}...`;
+            const url = `https://raw.githubusercontent.com/${GITHUB_LIBRARY.owner}/${GITHUB_LIBRARY.repo}/${GITHUB_LIBRARY.branch}/${path}`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Datei konnte nicht geladen werden (${response.status})`);
+                }
+                const imported = await response.json();
+                state = {
+                    shots: Array.isArray(imported.shots) ? imported.shots : [],
+                    gameNote: imported.gameNote || '',
+                    filters: {
+                        showOnly: null,
+                        hiddenNumbers: []
+                    }
+                };
+                persistState();
+                render();
+                showToast(`Cloud-Spiel ${path} geladen.`, 'success');
+                status.textContent = `Cloud-Datei ${path} geladen.`;
+                closeLibrary();
+            } catch (err) {
+                status.textContent = 'Fehler beim Laden der Datei.';
+                showToast(err.message || 'Datei konnte nicht importiert werden.', 'error');
+            }
+        }
+
+        /**
+         * Rendering function: Synchronizes UI with state completely
+         */
+        function render() {
+            // Update counter with animation
+            const counterElement = document.getElementById('total-shots');
+            const newCount = state.shots.length;
+            if (counterElement.innerText !== newCount.toString()) {
+                counterElement.style.animation = 'none';
+                setTimeout(() => {
+                    counterElement.innerText = newCount;
+                    counterElement.style.animation = 'slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                }, 10);
+            }
+
+            // Render markers with filters
+            const goalFrame = document.getElementById('goal-frame');
+            goalFrame.innerHTML = ''; // Clear existing
+            const { showOnly, hiddenNumbers } = state.filters;
+
+            state.shots.forEach((shot, index) => {
+                const shouldHide = (showOnly && shot.number !== showOnly) || hiddenNumbers.includes(shot.number);
+                if (shouldHide) return;
+
+                const marker = document.createElement('div');
+                marker.className = 'marker';
+                marker.style.left = shot.x + '%';
+                marker.style.top = shot.y + '%';
+                marker.innerText = shot.number;
+                marker.style.animationDelay = (index * 50) + 'ms';
+                marker.addEventListener('dblclick', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openDeleteModal(index, shot.number);
+                });
+                goalFrame.appendChild(marker);
+            });
+
+            // Render game note
+            const noteField = document.getElementById('game-note');
+            if (noteField) {
+                noteField.value = state.gameNote;
+            }
+
+            // Calculate and render ranking
+            const rankingList = document.getElementById('ranking-list');
+            rankingList.innerHTML = ''; // Clear existing
+
+            const counts = {};
+            state.shots.forEach(shot => {
+                counts[shot.number] = (counts[shot.number] || 0) + 1;
+            });
+
+            // Sort descending
+            const sortedNumbers = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
+
+            if (sortedNumbers.length === 0) {
+                rankingList.innerHTML = '<li class="text-secondary" style="text-align: center; padding: 1rem 0; animation: slideDownIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">Keine Daten vorhanden</li>';
+            } else {
+                sortedNumbers.forEach((num, index) => {
+                    const isHidden = state.filters.hiddenNumbers.includes(num);
+                    const li = document.createElement('li');
+                    li.className = 'ranking-item';
+                    li.style.animationDelay = (index * 50) + 'ms';
+                    li.innerHTML = `
+                        <div class="player-info">
+                            <div class="jersey-badge">${num}</div>
+                            <span>Spieler ${num}</span>
+                        </div>
+                        <div class="ranking-actions">
+                            <span class="shot-count">${counts[num]} Wurf${counts[num] > 1 ? 'e' : ''}</span>
+                            <div class="action-group">
+                                <button class="btn btn-small" onclick="showOnlyNumber('${num}')">Nur diese anzeigen</button>
+                                <button class="btn btn-small btn-hide" onclick="toggleHiddenNumber('${num}')">${isHidden ? 'Anzeigen' : 'Verbergen'}</button>
+                            </div>
+                        </div>
+                    `;
+                    rankingList.appendChild(li);
+                });
+            }
+        }
+
+        /**
+         * Security / Gatekeeper
+         */
+        const CORRECT_PIN = "7521";
+        const pinInput = document.getElementById('pin-input');
+        const loginScreen = document.getElementById('login-screen');
+        const dashboard = document.getElementById('dashboard');
+
+        function focusPin() {
+            pinInput.focus();
+        }
+
+        // Auto-focus on load
+        window.addEventListener('load', () => {
+            focusPin();
+            loadState(); // Initial load
+        });
+
+        /**
+         * Toast Notification System
+         */
+        function showToast(message, type = 'info', duration = 3000) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+
+            container.appendChild(toast);
+            container.style.pointerEvents = 'all';
+
+            // Auto remove
+            setTimeout(() => {
+                toast.classList.add('exit');
+                setTimeout(() => {
+                    toast.remove();
+                    if (container.children.length === 0) {
+                        container.style.pointerEvents = 'none';
+                    }
+                }, 400);
+            }, duration);
+        }
+
+        /**
+         * Activation Animation - Simple Haptic Feedback
+         */
+        function triggerActivationAnimation() {
+            // Haptic Feedback only
+            if (navigator.vibrate) {
+                navigator.vibrate([30, 50, 30]);
+            }
+        }
+
+        // Trigger on window focus (tab comes to foreground)
+        window.addEventListener('focus', () => {
+            if (dashboard.classList.contains('active')) {
+                triggerActivationAnimation();
+            }
+        });
+
+        // Trigger when tab becomes visible after being hidden
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && dashboard.classList.contains('active')) {
+                triggerActivationAnimation();
+            }
+        });
+
+        pinInput.addEventListener('input', (e) => {
+            if (e.target.value === CORRECT_PIN) {
+                loginScreen.style.display = 'none';
+                dashboard.classList.add('active');
+                pinInput.blur();
+                render(); // Render data when unlocked
+                triggerActivationAnimation(); // Trigger animation on unlock
+            }
+        });
+
+        /**
+         * Interaction / Mapping
+         */
+        const goalFrame = document.getElementById('goal-frame');
+        const modal = document.getElementById('number-modal');
+        const jerseyInput = document.getElementById('jersey-input');
+
+        goalFrame.addEventListener('click', (e) => {
+            if (e.target !== goalFrame) return;
+            const rect = goalFrame.getBoundingClientRect();
+            // Calculate relative percentages
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            
+            tempShot = { x, y };
+            openModal();
+        });
+
+        function openModal() {
+            modal.classList.add('active');
+            jerseyInput.value = '';
+            // Delay focus slightly to ensure modal is visible (especially on iOS)
+            setTimeout(() => jerseyInput.focus(), 100);
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            tempShot = null;
+            jerseyInput.blur();
+        }
+
+        function saveShot() {
+            const num = jerseyInput.value.trim();
+            if (!num) return; // Prevent empty
+
+            if (tempShot) {
+                state.shots.push({
+                    x: tempShot.x.toFixed(2), // Keep 2 decimals
+                    y: tempShot.y.toFixed(2),
+                    number: num,
+                    timestamp: Date.now()
+                });
+                persistState();
+                render();
+            }
+            closeModal();
+        }
+
+        function openDeleteModal(index, number) {
+            pendingDeleteIndex = index;
+            const deleteModal = document.getElementById('delete-modal');
+            const deleteInput = document.getElementById('delete-confirm-input');
+            deleteInput.value = '';
+            deleteInput.placeholder = `Nummer ${number} eingeben`;
+            deleteModal.classList.add('active');
+            setTimeout(() => deleteInput.focus(), 100);
+        }
+
+        function closeDeleteModal() {
+            pendingDeleteIndex = null;
+            const deleteModal = document.getElementById('delete-modal');
+            deleteModal.classList.remove('active');
+            document.getElementById('delete-confirm-input').blur();
+        }
+
+        function confirmRemoveShot() {
+            const deleteInput = document.getElementById('delete-confirm-input');
+            const enteredNumber = deleteInput.value.trim();
+
+            if (pendingDeleteIndex === null || enteredNumber === '') {
+                showToast('Bitte die Nummer bestätigen.', 'warning');
+                return;
+            }
+
+            const shot = state.shots[pendingDeleteIndex];
+            if (!shot) {
+                closeDeleteModal();
+                return;
+            }
+
+            if (enteredNumber !== shot.number) {
+                showToast('Nummer stimmt nicht überein.', 'error');
+                return;
+            }
+
+            state.shots.splice(pendingDeleteIndex, 1);
+            pendingDeleteIndex = null;
+            persistState();
+            render();
+            closeDeleteModal();
+            showToast(`Marker für Nummer ${enteredNumber} gelöscht.`, 'success');
+        }
+
+        function saveGameNote() {
+            const noteField = document.getElementById('game-note');
+            state.gameNote = noteField.value.trim();
+            persistState();
+            showToast('Spielnotiz gespeichert.', 'success');
+        }
+
+        function showOnlyNumber(number) {
+            state.filters.showOnly = number;
+            state.filters.hiddenNumbers = [];
+            persistState();
+            render();
+            showToast(`Nur Nummer ${number} wird angezeigt.`, 'info');
+        }
+
+        function toggleHiddenNumber(number) {
+            const hidden = state.filters.hiddenNumbers;
+            if (hidden.includes(number)) {
+                state.filters.hiddenNumbers = hidden.filter(n => n !== number);
+                showToast(`Nummer ${number} wird wieder angezeigt.`, 'success');
+            } else {
+                state.filters.hiddenNumbers = [...hidden, number];
+                showToast(`Nummer ${number} ausgeblendet.`, 'info');
+            }
+            state.filters.showOnly = null;
+            persistState();
+            render();
+        }
+
+        function resetFilters() {
+            state.filters.showOnly = null;
+            state.filters.hiddenNumbers = [];
+            persistState();
+            render();
+            showToast('Filter zurückgesetzt.', 'success');
+        }
+
+        // Enter key handling in modal
+        jerseyInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                saveShot();
+            }
+        });
+
+        document.getElementById('delete-confirm-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                confirmRemoveShot();
+            }
+        });
+
+        /**
+         * Data Management (Export/Import/Reset)
+         */
+        function exportData() {
+            if (state.shots.length === 0) {
+                showToast('Keine Daten zum Exportieren vorhanden.', 'warning');
+                return;
+            }
+            const dataStr = JSON.stringify(state, null, 2);
+            const blob = new Blob([dataStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `handball_scout_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('Daten erfolgreich exportiert.', 'success');
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported && Array.isArray(imported.shots)) {
+                        state = {
+                            shots: imported.shots,
+                            gameNote: imported.gameNote || '',
+                            filters: {
+                                showOnly: imported.filters && imported.filters.showOnly ? imported.filters.showOnly : null,
+                                hiddenNumbers: Array.isArray(imported.filters && imported.filters.hiddenNumbers) ? imported.filters.hiddenNumbers : []
+                            }
+                        };
+                        persistState();
+                        render();
+                        showToast('Daten erfolgreich importiert.', 'success');
+                    } else {
+                        showToast('Ungültiges Dateiformat.', 'error');
+                    }
+                } catch (err) {
+                    showToast('Fehler beim Lesen der Datei.', 'error');
+                }
+                // Reset input
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        function hardReset() {
+            // Clear all data completely
+            state = {
+                shots: [],
+                gameNote: '',
+                filters: {
+                    showOnly: null,
+                    hiddenNumbers: []
+                }
+            };
+            
+            // Clear localStorage completely
+            localStorage.removeItem('handball_shots');
+            localStorage.clear();
+            
+            // Clear sessionStorage
+            sessionStorage.clear();
+            
+            // Update UI
+            render();
+            
+            // Show confirmation
+            showToast('Alle Spielerdaten wurden gelöscht.', 'success');
+            
+            // Optional: Reload page to ensure clean state
+            setTimeout(() => {
+                location.reload();
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
