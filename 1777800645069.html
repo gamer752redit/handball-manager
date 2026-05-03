@@ -259,7 +259,7 @@
             background: var(--warn-color);
             box-shadow: 0 2px 5px rgba(255, 59, 48, 0.4);
         }
-        
+
         .marker.outcome-goal {
             background: var(--success-color);
             box-shadow: 0 2px 5px rgba(52, 199, 89, 0.4);
@@ -672,6 +672,88 @@
         * {
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+
+        /* High Quality Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .loading-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .loading-content {
+            background: var(--bg-color);
+            padding: 2.5rem;
+            border-radius: 28px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+            text-align: center;
+            transform: scale(0.9) translateY(10px);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            width: 90%;
+            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .loading-overlay.active .loading-content {
+            transform: scale(1) translateY(0);
+        }
+        .spinner-ring {
+            width: 54px;
+            height: 54px;
+            border: 4px solid #e5e5ea;
+            border-top: 4px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite;
+            margin-bottom: 1.5rem;
+        }
+        [data-theme="dark"] .spinner-ring {
+            border-color: #333;
+            border-top-color: var(--accent-color);
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.5px;
+        }
+        .progress-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: #e5e5ea;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        [data-theme="dark"] .progress-bar-bg {
+            background: #333;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--accent-color);
+            width: 0%;
+            border-radius: 3px;
+            transition: width 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
     </style>
 </head>
 
@@ -682,6 +764,17 @@
 
     <!-- Particle Container -->
     <div id="particle-container"></div>
+
+    <!-- High Quality Loading Screen -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="spinner-ring"></div>
+            <div class="loading-text" id="loading-text">Downloading... 0%</div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-bar-fill"></div>
+            </div>
+        </div>
+    </div>
 
     <div id="login-screen" onclick="focusPin()">
         <div class="login-card">
@@ -699,15 +792,19 @@
             </div>
             <h2 data-i18n="liveAnalysis">Live Analyse</h2>
             <div style="display: flex; gap: 0.5rem; align-items: center;">
-                <button class="btn btn-small" onclick="toggleTheme()" style="font-size:1.2rem; padding:0.4rem; background:transparent;">🌓</button>
-                <button class="btn btn-small" onclick="toggleLanguage()" id="lang-btn" style="padding:0.4rem; background:var(--accent-color); color:white;">EN</button>
+                <button class="btn btn-small" onclick="toggleTheme()"
+                    style="font-size:1.2rem; padding:0.4rem; background:transparent;">🌓</button>
+                <button class="btn btn-small" onclick="toggleLanguage()" id="lang-btn"
+                    style="padding:0.4rem; background:var(--accent-color); color:white;">EN</button>
             </div>
             <div class="stat-badge">
                 <span data-i18n="shots">Würfe</span>: <span id="total-shots">0</span>
             </div>
         </div>
 
-        <div id="readonly-banner" style="display:none; background:var(--warn-color); color:white; text-align:center; padding:0.5rem; border-radius:12px; margin-bottom:1rem; font-weight:bold;" data-i18n="readonlyActive">Schreibgeschützt</div>
+        <div id="readonly-banner"
+            style="display:none; background:var(--warn-color); color:white; text-align:center; padding:0.5rem; border-radius:12px; margin-bottom:1rem; font-weight:bold;"
+            data-i18n="readonlyActive">Schreibgeschützt</div>
 
         <div class="goal-container">
             <p class="text-secondary" style="margin-bottom: 0.5rem; text-align: center;">Torfläche antippen für Marker,
@@ -737,12 +834,14 @@
         </div>
 
         <div class="controls">
-            <label style="grid-column: span 2; display: flex; align-items: center; gap: 0.5rem; justify-content: center; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 12px;">
+            <label
+                style="grid-column: span 2; display: flex; align-items: center; gap: 0.5rem; justify-content: center; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 12px;">
                 <input type="checkbox" id="export-readonly" style="width: 18px; height: 18px;">
                 <span data-i18n="exportReadonly">Als Schreibgeschützt exportieren</span>
             </label>
             <button class="btn btn-export" onclick="exportData()" data-i18n="exportData">Daten Exportieren</button>
-            <button class="btn btn-import" onclick="document.getElementById('file-import').click()" data-i18n="importData">Daten
+            <button class="btn btn-import" onclick="document.getElementById('file-import').click()"
+                data-i18n="importData">Daten
                 Importieren</button>
             <button class="btn btn-reset" onclick="resetFilters()" data-i18n="resetFilter">Filter zurücksetzen</button>
             <button class="btn btn-reset" onclick="hardReset()" data-i18n="hardReset">Hard-Reset (Löschen)</button>
@@ -756,9 +855,10 @@
             <h2 data-i18n="jerseyNumber">Rückennummer</h2>
             <p class="text-secondary" data-i18n="enterOpponent">Gegnerischen Werfer eingeben</p>
             <input type="number" id="jersey-input" class="modal-input" pattern="\d*" inputmode="numeric">
-            
+
             <div style="display:flex; gap:1rem; margin-bottom:1.5rem; justify-content:center;">
-                <label style="display:flex; align-items:center; gap:0.5rem; color:var(--success-color); font-weight:bold;">
+                <label
+                    style="display:flex; align-items:center; gap:0.5rem; color:var(--success-color); font-weight:bold;">
                     <input type="radio" name="shot-outcome" value="goal" checked> <span data-i18n="goal">Tor</span>
                 </label>
                 <label style="display:flex; align-items:center; gap:0.5rem; color:var(--warn-color); font-weight:bold;">
@@ -829,7 +929,6 @@
 
         let state = {
             shots: [], // { x: %, y: %, number: string, outcome: string, timestamp: number }
-            cards: {}, // { "number": { yellow: 0, red: 0 } }
             gameNote: '',
             filters: {
                 showOnly: null,
@@ -847,19 +946,19 @@
 
         const i18nDict = {
             de: {
-                appTitle: "Scouting Pro", pinReq: "Eingabe PIN erforderlich", cloudLib: "Cloud Library", 
-                liveAnalysis: "Live Analyse", shots: "Würfe", topScorer: "Top Scorer", 
-                gameNote: "Spielnotiz", saveNote: "Notiz speichern", exportReadonly: "Als Schreibgeschützt exportieren", 
-                exportData: "Daten Exportieren", importData: "Daten Importieren", resetFilter: "Filter zurücksetzen", 
-                hardReset: "Hard-Reset (Löschen)", jerseyNumber: "Rückennummer", enterOpponent: "Gegnerischen Werfer eingeben", 
+                appTitle: "Scouting Pro", pinReq: "Eingabe PIN erforderlich", cloudLib: "Cloud Library",
+                liveAnalysis: "Live Analyse", shots: "Würfe", topScorer: "Top Scorer",
+                gameNote: "Spielnotiz", saveNote: "Notiz speichern", exportReadonly: "Als Schreibgeschützt exportieren",
+                exportData: "Daten Exportieren", importData: "Daten Importieren", resetFilter: "Filter zurücksetzen",
+                hardReset: "Hard-Reset (Löschen)", jerseyNumber: "Rückennummer", enterOpponent: "Gegnerischen Werfer eingeben",
                 goal: "Tor", saved: "Gehalten", cancel: "Abbrechen", save: "Speichern", readonlyActive: "Schreibgeschützt"
             },
             en: {
-                appTitle: "Scouting Pro", pinReq: "PIN Required", cloudLib: "Cloud Library", 
-                liveAnalysis: "Live Analysis", shots: "Shots", topScorer: "Top Scorer", 
-                gameNote: "Game Note", saveNote: "Save Note", exportReadonly: "Export as Read-Only", 
-                exportData: "Export Data", importData: "Import Data", resetFilter: "Reset Filters", 
-                hardReset: "Hard Reset (Delete)", jerseyNumber: "Jersey Number", enterOpponent: "Enter opponent shooter", 
+                appTitle: "Scouting Pro", pinReq: "PIN Required", cloudLib: "Cloud Library",
+                liveAnalysis: "Live Analysis", shots: "Shots", topScorer: "Top Scorer",
+                gameNote: "Game Note", saveNote: "Save Note", exportReadonly: "Export as Read-Only",
+                exportData: "Export Data", importData: "Import Data", resetFilter: "Reset Filters",
+                hardReset: "Hard Reset (Delete)", jerseyNumber: "Jersey Number", enterOpponent: "Enter opponent shooter",
                 goal: "Goal", saved: "Saved", cancel: "Cancel", save: "Save", readonlyActive: "Read-Only Active"
             }
         };
@@ -891,12 +990,12 @@
         function playCleanSound(type) {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             if (audioCtx.state === 'suspended') audioCtx.resume();
-            
+
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.connect(gain);
             gain.connect(audioCtx.destination);
-            
+
             const t = audioCtx.currentTime;
             if (type === 'click') {
                 osc.type = 'sine';
@@ -933,7 +1032,6 @@
                     const parsed = JSON.parse(saved);
                     state = {
                         shots: Array.isArray(parsed.shots) ? parsed.shots : [],
-                        cards: parsed.cards || {},
                         gameNote: parsed.gameNote || '',
                         filters: {
                             showOnly: parsed.filters && parsed.filters.showOnly ? parsed.filters.showOnly : null,
@@ -1137,6 +1235,32 @@
             status.textContent = `Lade ${path}...`;
             const url = `https://raw.githubusercontent.com/${GITHUB_LIBRARY.owner}/${GITHUB_LIBRARY.repo}/${GITHUB_LIBRARY.branch}/${path}`;
             try {
+                closeLibrary();
+                const overlay = document.getElementById('loading-overlay');
+                const text = document.getElementById('loading-text');
+                const fill = document.getElementById('progress-bar-fill');
+                
+                text.textContent = 'Downloading... 0%';
+                fill.style.width = '0%';
+                overlay.classList.add('active');
+                
+                // Fake 3 second loading with realistic stutter
+                await new Promise(resolve => {
+                    let progress = 0;
+                    const totalTime = 3000;
+                    const steps = 30;
+                    const interval = setInterval(() => {
+                        progress += (100 / steps) * (0.6 + Math.random() * 0.8);
+                        if (progress >= 100) {
+                            progress = 100;
+                            clearInterval(interval);
+                            setTimeout(resolve, 200);
+                        }
+                        text.textContent = `Downloading... ${Math.floor(progress)}%`;
+                        fill.style.width = `${progress}%`;
+                    }, totalTime / steps);
+                });
+
                 const response = await fetch(url);
                 if (!response.ok) {
                     throw new Error(`Datei konnte nicht geladen werden (${response.status})`);
@@ -1148,14 +1272,17 @@
                     filters: {
                         showOnly: null,
                         hiddenNumbers: []
-                    }
+                    },
+                    settings: imported.settings || { readOnly: false }
                 };
                 persistState();
                 render();
+                
+                overlay.classList.remove('active');
                 showToast(`Cloud-Spiel ${path} geladen.`, 'success');
                 status.textContent = `Cloud-Datei ${path} geladen.`;
-                closeLibrary();
             } catch (err) {
+                document.getElementById('loading-overlay').classList.remove('active');
                 status.textContent = 'Fehler beim Laden der Datei.';
                 showToast(err.message || 'Datei konnte nicht importiert werden.', 'error');
             }
@@ -1200,6 +1327,12 @@
          * Rendering function: Synchronizes UI with state completely
          */
         function render() {
+            // Apply ReadOnly UI logic
+            const ro = state.settings?.readOnly;
+            document.getElementById('readonly-banner').style.display = ro ? 'block' : 'none';
+            document.getElementById('game-note').readOnly = !!ro;
+            document.getElementById('note-toolbar').style.display = ro ? 'none' : 'flex';
+
             // Update counter with animation
             const counterElement = document.getElementById('total-shots');
             const newCount = state.shots.length;
@@ -1221,7 +1354,7 @@
                 if (shouldHide) return;
 
                 const marker = document.createElement('div');
-                marker.className = 'marker';
+                marker.className = `marker ${shot.outcome ? 'outcome-' + shot.outcome : 'outcome-goal'}`;
                 marker.style.left = shot.x + '%';
                 marker.style.top = shot.y + '%';
                 marker.innerText = shot.number;
@@ -1229,7 +1362,9 @@
                 marker.addEventListener('dblclick', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    openDeleteModal(index, shot.number);
+                    if (!state.settings?.readOnly) {
+                        openDeleteModal(index, shot.number);
+                    }
                 });
                 goalFrame.appendChild(marker);
             });
@@ -1260,6 +1395,7 @@
                     const li = document.createElement('li');
                     li.className = 'ranking-item';
                     li.style.animationDelay = (index * 50) + 'ms';
+
                     li.innerHTML = `
                         <div class="player-info">
                             <div class="jersey-badge">${num}</div>
@@ -1362,7 +1498,9 @@
         const jerseyInput = document.getElementById('jersey-input');
 
         goalFrame.addEventListener('click', (e) => {
+            if (state.settings?.readOnly) return;
             if (e.target !== goalFrame) return;
+            playCleanSound('click');
             const rect = goalFrame.getBoundingClientRect();
             // Calculate relative percentages
             const x = ((e.clientX - rect.left) / rect.width) * 100;
@@ -1389,16 +1527,21 @@
             const num = jerseyInput.value.trim();
             if (!num) return; // Prevent empty
 
+            const outcomeEl = document.querySelector('input[name="shot-outcome"]:checked');
+            const outcome = outcomeEl ? outcomeEl.value : 'goal';
+
             if (tempShot) {
                 state.shots.push({
                     x: tempShot.x.toFixed(2), // Keep 2 decimals
                     y: tempShot.y.toFixed(2),
                     number: num,
+                    outcome: outcome,
                     timestamp: Date.now(), // Current time in milliseconds
                     time: new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) // HH:MM:SS
                 });
                 persistState();
                 render();
+                playCleanSound('success');
             }
             closeModal();
         }
@@ -1498,6 +1641,23 @@
             }
         });
 
+        function insertNoteFormat(startStr, endStr) {
+            if (state.settings?.readOnly) return;
+            playCleanSound('click');
+            const noteField = document.getElementById('game-note');
+            const start = noteField.selectionStart;
+            const end = noteField.selectionEnd;
+            const text = noteField.value;
+            const before = text.substring(0, start);
+            const selection = text.substring(start, end);
+            const after = text.substring(end);
+
+            noteField.value = before + startStr + selection + endStr + after;
+            noteField.focus();
+            noteField.selectionStart = start + startStr.length;
+            noteField.selectionEnd = start + startStr.length + selection.length;
+        }
+
         /**
          * Data Management (Export/Import/Reset)
          */
@@ -1506,7 +1666,11 @@
                 showToast('Keine Daten zum Exportieren vorhanden.', 'warning');
                 return;
             }
-            const dataStr = JSON.stringify(state, null, 2);
+            playCleanSound('success');
+            const isReadonly = document.getElementById('export-readonly').checked;
+            const exportState = { ...state, settings: { readOnly: isReadonly } };
+
+            const dataStr = JSON.stringify(exportState, null, 2);
             const blob = new Blob([dataStr], { type: "application/json" });
             const url = URL.createObjectURL(blob);
 
@@ -1531,19 +1695,24 @@
                     if (imported && Array.isArray(imported.shots)) {
                         state = {
                             shots: imported.shots,
+                            cards: imported.cards || {},
                             gameNote: imported.gameNote || '',
                             filters: {
                                 showOnly: imported.filters && imported.filters.showOnly ? imported.filters.showOnly : null,
                                 hiddenNumbers: Array.isArray(imported.filters && imported.filters.hiddenNumbers) ? imported.filters.hiddenNumbers : []
-                            }
+                            },
+                            settings: imported.settings || { readOnly: false }
                         };
                         persistState();
                         render();
+                        playCleanSound('success');
                         showToast('Daten erfolgreich importiert.', 'success');
                     } else {
+                        playCleanSound('error');
                         showToast('Ungültiges Dateiformat.', 'error');
                     }
                 } catch (err) {
+                    playCleanSound('error');
                     showToast('Fehler beim Lesen der Datei.', 'error');
                 }
                 // Reset input
@@ -1553,14 +1722,22 @@
         }
 
         function hardReset() {
+            if (state.settings?.readOnly) {
+                showToast('Schreibgeschützt.', 'error');
+                playCleanSound('error');
+                return;
+            }
+            playCleanSound('delete');
             // Clear all data completely
             state = {
                 shots: [],
+                cards: {},
                 gameNote: '',
                 filters: {
                     showOnly: null,
                     hiddenNumbers: []
-                }
+                },
+                settings: { readOnly: false }
             };
 
             // Clear localStorage completely
