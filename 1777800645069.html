@@ -862,9 +862,21 @@
                 
                 // Calculate total goals for this group
                 const groupFiles = groups[groupName];
-                const totalGoals = groupFiles.reduce((sum, file) => {
-                    return sum + (libraryFileShotCounts[file.name]?.count || 0);
-                }, 0);
+                let totalGoals = 0;
+                let cumulativeShots = []; // All shots in sequence
+                
+                // Sort files by half number and accumulate shots
+                groupFiles.sort((a, b) => getLibraryHalf(a.name) - getLibraryHalf(b.name)).forEach(file => {
+                    const fileData = libraryFileShotCounts[file.name];
+                    if (fileData && fileData.shots) {
+                        cumulativeShots.push(...fileData.shots);
+                        totalGoals += fileData.shots.length;
+                    }
+                });
+                
+                // Find 30th and 40th goals from cumulative sequence
+                const goal30 = cumulativeShots.length >= 30 ? cumulativeShots[29].number : 'n/a';
+                const goal40 = cumulativeShots.length >= 40 ? cumulativeShots[39].number : 'n/a';
                 
                 title.textContent = `Gruppe: ${groupName} | Gesamt: ${totalGoals} Tor${totalGoals !== 1 ? 'e' : ''}`;
                 
@@ -873,9 +885,7 @@
                 infoEl.style.fontSize = '0.85rem';
                 infoEl.style.color = 'var(--text-sec)';
                 infoEl.style.marginBottom = '0.75rem';
-                const goal30List = groupFiles.map(f => libraryFileShotCounts[f.name]?.goal30 || 'n/a').filter(g => g !== 'n/a');
-                const goal40List = groupFiles.map(f => libraryFileShotCounts[f.name]?.goal40 || 'n/a').filter(g => g !== 'n/a');
-                infoEl.textContent = `30. Tor: ${goal30List.join(', ') || 'n/a'} | 40. Tor: ${goal40List.join(', ') || 'n/a'}`;
+                infoEl.textContent = `30. Tor: ${goal30} | 40. Tor: ${goal40}`;
                 
                 groupEl.appendChild(title);
                 groupEl.appendChild(infoEl);
