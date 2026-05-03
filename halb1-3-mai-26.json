@@ -90,5 +90,14 @@
       "number": "12",
       "timestamp": 1777809936120
     }
-  ]
+  ],
+  "gameNote": "",
+  "filters": {
+    "showOnly": null,
+    "hiddenNumbers": []
+  },
+  "cards": {},
+  "settings": {
+    "readOnly": true
+  }
 }
