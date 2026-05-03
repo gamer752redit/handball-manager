@@ -693,6 +693,7 @@
 
         let libraryFiles = [];
         let libraryLoaded = false;
+        let libraryFileShotCounts = {}; // Cache for shot counts: { 'filename': count }
 
         let state = {
             shots: [], // { x: %, y: %, number: string, timestamp: number }
@@ -810,16 +811,24 @@
                 const groupEl = document.createElement('div');
                 groupEl.className = 'library-group';
                 const title = document.createElement('h3');
-                title.textContent = `Gruppe: ${groupName}`;
+                
+                // Calculate total goals for this group
+                const totalGoals = groups[groupName].reduce((sum, file) => {
+                    return sum + (libraryFileShotCounts[file.name] || 0);
+                }, 0);
+                
+                title.textContent = `Gruppe: ${groupName} | Gesamt Tore: ${totalGoals}`;
                 groupEl.appendChild(title);
 
                 groups[groupName].forEach(file => {
                     const item = document.createElement('div');
                     item.className = 'library-item';
                     item.onclick = () => loadLibraryFile(file.path);
+                    const halfNum = getLibraryHalf(file.name);
+                    const goalCount = libraryFileShotCounts[file.name] || 0;
                     item.innerHTML = `
                         <span class="item-name">${file.name}</span>
-                        <span class="item-meta">halb ${getLibraryHalf(file.name)}</span>
+                        <span class="item-meta">halb ${halfNum} • ${goalCount} Tor${goalCount !== 1 ? 'e' : ''}</span>
                     `;
                     groupEl.appendChild(item);
                 });
