@@ -885,6 +885,18 @@
             </div>
         </div>
     </div>
+    <!-- Hard Reset Confirmation Modal -->
+    <div class="modal-overlay" id="reset-modal">
+        <div class="modal-card">
+            <h2>Hard-Reset</h2>
+            <p class="text-secondary">Alle Daten werden gelöscht. Bitte tippen Sie <strong>CONFIRM</strong> ein, um fortzufahren.</p>
+            <input type="text" id="reset-confirm-input" class="modal-input" placeholder="CONFIRM">
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeResetModal()">Abbrechen</button>
+                <button class="btn btn-save" style="background:var(--warn-color);" onclick="executeHardReset()">Löschen</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Cloud Library Modal -->
     <div class="modal-overlay library-modal" id="library-modal">
@@ -1641,6 +1653,12 @@
             }
         });
 
+        document.getElementById('reset-confirm-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                executeHardReset();
+            }
+        });
+
         function insertNoteFormat(startStr, endStr) {
             if (state.settings?.readOnly) return;
             playCleanSound('click');
@@ -1695,7 +1713,6 @@
                     if (imported && Array.isArray(imported.shots)) {
                         state = {
                             shots: imported.shots,
-                            cards: imported.cards || {},
                             gameNote: imported.gameNote || '',
                             filters: {
                                 showOnly: imported.filters && imported.filters.showOnly ? imported.filters.showOnly : null,
@@ -1722,16 +1739,31 @@
         }
 
         function hardReset() {
-            if (state.settings?.readOnly) {
-                showToast('Schreibgeschützt.', 'error');
+            const resetModal = document.getElementById('reset-modal');
+            const resetInput = document.getElementById('reset-confirm-input');
+            resetInput.value = '';
+            resetModal.classList.add('active');
+            setTimeout(() => resetInput.focus(), 100);
+        }
+
+        function closeResetModal() {
+            document.getElementById('reset-modal').classList.remove('active');
+        }
+
+        function executeHardReset() {
+            const input = document.getElementById('reset-confirm-input').value;
+            if (input !== 'CONFIRM') {
+                showToast('Bitte "CONFIRM" exakt eingeben.', 'error');
                 playCleanSound('error');
                 return;
             }
+            
+            closeResetModal();
             playCleanSound('delete');
+            
             // Clear all data completely
             state = {
                 shots: [],
-                cards: {},
                 gameNote: '',
                 filters: {
                     showOnly: null,
