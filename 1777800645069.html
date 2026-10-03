@@ -1,1795 +1,1523 @@
-<head>
-    <link rel="icon" type="image/png"
-        href="https://www.asv-suechteln.de/wp-content/uploads/2022/03/2022-ASV-Logo-1.png">
-
-    <link rel="apple-touch-icon" href="https://www.asv-suechteln.de/wp-content/uploads/2022/03/2022-ASV-Logo-1.png">
-</head>
-
-
 <!DOCTYPE html>
 <html lang="de">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Handball Shot Analysis Pro</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2064%2064%22%3E%3Crect%20width=%2264%22%20height=%2264%22%20rx=%2214%22%20fill=%22%231a2430%22/%3E%3Cpath%20d=%22M35%2029L11%2053%22%20stroke=%22%23f2b632%22%20stroke-width=%223.4%22%20stroke-linecap=%22round%22/%3E%3Cpath%20d=%22M25%2022L10%2037%22%20stroke=%22%23f2b632%22%20stroke-width=%222.4%22%20stroke-linecap=%22round%22%20opacity=%22.55%22/%3E%3Cpath%20d=%22M43%2039L30%2052%22%20stroke=%22%23f2b632%22%20stroke-width=%222.4%22%20stroke-linecap=%22round%22%20opacity=%22.55%22/%3E%3Cpolygon%20points=%2242.00%2C8.00%2045.41%2C17.31%2055.31%2C17.67%2047.52%2C23.79%2050.23%2C33.33%2042.00%2C27.80%2033.77%2C33.33%2036.48%2C23.79%2028.69%2C17.67%2038.59%2C17.31%22%20fill=%22%23f2b632%22%20stroke=%22%23f2b632%22%20stroke-width=%221.5%22%20stroke-linejoin=%22round%22/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/png;base64,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">
     <style>
         :root {
-            --bg-color: #f5f5f7;
-            --accent-color: #007AFF;
-            --warn-color: #ff3b30;
-            --success-color: #34c759;
-            --text-main: #1d1d1f;
-            --text-sec: #86868b;
-            --font-stack: -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            --card-radius: 18px;
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --bg: #e8ecf0;
+            --card: #ffffff;
+            --ink: #1a2430;
+            --muted: #66717e;
+            --line: #d5dce3;
+            --floor: #eef1f4;
+            --team-a: #1f55d0;
+            --team-b: #d94f25;
+            --danger: #c2372d;
+            --ok: #1b7f45;
+            --r: 10px;
+            --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
         [data-theme="dark"] {
-            --bg-color: #000000;
-            --accent-color: #0a84ff;
-            --warn-color: #ff453a;
-            --success-color: #32d74b;
-            --text-main: #f5f5f7;
-            --text-sec: #98989d;
-            --shadow: 0 10px 30px rgba(255, 255, 255, 0.05);
+            --bg: #0f1419;
+            --card: #181f27;
+            --ink: #e9eef3;
+            --muted: #8995a2;
+            --line: #2a343f;
+            --floor: #1d252e;
+            --team-a: #6f98ff;
+            --team-b: #ff8b62;
+            --danger: #ff6a5e;
+            --ok: #4cc47d;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            user-select: none;
-            /* Prevent text selection for app-like feel */
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: var(--font-stack);
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            overflow-x: hidden;
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--ink);
             -webkit-font-smoothing: antialiased;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            user-select: none;
+            -webkit-user-select: none;
+            overflow-x: hidden;
         }
 
-        /* Typography */
-        h1,
-        h2,
-        h3 {
-            font-weight: 700;
+        button, input, textarea { font: inherit; color: inherit; }
+        input, textarea { user-select: text; -webkit-user-select: text; }
+        button { cursor: pointer; }
+
+        .t-a { --tc: var(--team-a); }
+        .t-b { --tc: var(--team-b); }
+
+        /* ---------- Icons ---------- */
+        .ic {
+            width: 20px; height: 20px; flex: none;
+            fill: none; stroke: currentColor; stroke-width: 1.8;
+            stroke-linecap: round; stroke-linejoin: round;
         }
 
-        .text-secondary {
-            color: var(--text-sec);
-            font-size: 0.9rem;
+        .icon-btn {
+            display: inline-grid; place-items: center;
+            width: 44px; height: 44px;
+            border-radius: var(--r);
+            border: 1px solid var(--line);
+            background: var(--card);
+            color: var(--ink);
+            transition: transform .12s ease, background .12s ease;
+        }
+        .icon-btn:active { transform: scale(.94); }
+        .icon-btn.sm { width: 36px; height: 36px; }
+        .icon-btn.sm .ic { width: 18px; height: 18px; }
+        .icon-btn.on, .icon-btn.primary { background: var(--ink); color: var(--card); border-color: var(--ink); }
+        .icon-btn.danger { color: var(--danger); }
+        .icon-btn.danger-fill { background: var(--danger); border-color: var(--danger); color: #fff; }
+        .icon-btn:focus-visible, input:focus-visible, textarea:focus-visible, .team-card:focus-visible {
+            outline: 2px solid var(--team-a); outline-offset: 2px;
         }
 
-        /* Gatekeeper Login */
+        /* ---------- Login ---------- */
         #login-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg-color);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            animation: fadeIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            position: fixed; inset: 0; z-index: 1000;
+            display: flex; align-items: center; justify-content: center;
+            background: var(--bg);
         }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes scaleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
         .login-card {
-            background: white;
-            padding: 2rem;
-            border-radius: var(--card-radius);
-            box-shadow: var(--shadow);
+            width: min(88vw, 320px);
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: var(--r);
+            padding: 28px 24px;
             text-align: center;
-            width: 90%;
-            max-width: 350px;
-            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
         }
-
-        .login-card h1 {
-            margin-bottom: 0.5rem;
-        }
-
+        .login-card img { width: 64px; height: 64px; object-fit: contain; margin-bottom: 14px; }
+        .login-card h1 { font-size: 1.25rem; font-weight: 700; }
+        .login-card p { color: var(--muted); font-size: .9rem; margin-top: 4px; }
         .pin-input {
-            width: 100%;
-            padding: 1rem;
-            font-size: 2rem;
-            text-align: center;
-            letter-spacing: 0.5rem;
-            border: 2px solid #e5e5ea;
-            border-radius: 12px;
-            margin-top: 1.5rem;
+            width: 100%; margin-top: 18px; padding: 12px;
+            font-size: 1.8rem; text-align: center; letter-spacing: .6rem;
+            background: var(--floor); border: 1px solid var(--line); border-radius: var(--r);
             outline: none;
-            transition: border-color 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            user-select: auto;
-            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
         }
+        .pin-input:focus { border-color: var(--ink); }
 
-        .pin-input:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
-        }
-
-        /* Dashboard layout */
+        /* ---------- Layout ---------- */
         #dashboard {
             display: none;
-            padding: 1rem;
-            max-width: 600px;
-            margin: 0 auto;
-            padding-bottom: 100px;
-            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-
-        #dashboard.active {
-            display: block;
-        }
-
-        .header {
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            gap: 1rem;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-top: 1rem;
-        }
-
-        .library-launcher {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-        }
-
-        .library-launcher .btn {
-            padding: 0.9rem 1rem;
-            font-size: 0.95rem;
-            background: #007AFF;
-            color: white;
-            box-shadow: 0 8px 25px rgba(0, 122, 255, 0.18);
-        }
-
-        .stat-badge {
-            background: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            font-weight: 600;
-            color: var(--accent-color);
-            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s both;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        /* Goal Area (3:2 ratio) */
-        .goal-container {
-            background: white;
-            border-radius: var(--card-radius);
-            box-shadow: var(--shadow);
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
-        }
-
-        .goal-frame {
-            width: 100%;
-            aspect-ratio: 3 / 2;
-            border: 6px solid #d1d1d6;
-            /* Goal posts */
-            border-bottom: none;
-            background: repeating-linear-gradient(45deg,
-                    transparent,
-                    transparent 10px,
-                    rgba(0, 0, 0, 0.03) 10px,
-                    rgba(0, 0, 0, 0.03) 12px), repeating-linear-gradient(-45deg,
-                    transparent,
-                    transparent 10px,
-                    rgba(0, 0, 0, 0.03) 10px,
-                    rgba(0, 0, 0, 0.03) 12px);
-            position: relative;
-            cursor: crosshair;
-            overflow: hidden;
-            border-radius: 4px 4px 0 0;
-        }
-
-        .goal-line {
-            height: 4px;
-            background: #d1d1d6;
-            width: 100%;
-        }
-
-        .marker {
-            position: absolute;
-            width: 28px;
-            height: 28px;
-            background: var(--accent-color);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 12px;
-            font-weight: 700;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 2px 5px rgba(0, 122, 255, 0.4);
-            pointer-events: auto;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .marker.outcome-saved {
-            background: var(--warn-color);
-            box-shadow: 0 2px 5px rgba(255, 59, 48, 0.4);
-        }
-
-        .marker.outcome-goal {
-            background: var(--success-color);
-            box-shadow: 0 2px 5px rgba(52, 199, 89, 0.4);
-        }
-
-        /* Top Scorer List */
-        .ranking-card {
-            background: white;
-            border-radius: var(--card-radius);
-            box-shadow: var(--shadow);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
-        }
-
-        .ranking-card h2 {
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-        }
-
-        .ranking-list {
-            list-style: none;
-        }
-
-        .ranking-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.8rem 0;
-            border-bottom: 1px solid #f2f2f7;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .ranking-item:last-child {
-            border-bottom: none;
-        }
-
-        .player-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .jersey-badge {
-            width: 36px;
-            height: 36px;
-            background: #f2f2f7;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .shot-count {
-            font-weight: 600;
-            color: var(--accent-color);
-        }
-
-        .note-card {
-            background: white;
-            border-radius: var(--card-radius);
-            box-shadow: var(--shadow);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
-        }
-
-        .note-card h2 {
-            margin-bottom: 0.75rem;
-            font-size: 1.1rem;
-        }
-
-        .ranking-actions {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 0.5rem;
-        }
-
-        .action-group {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-        }
-
-        .btn-small {
-            padding: 0.55rem 0.75rem;
-            font-size: 0.85rem;
-            border-radius: 10px;
-            min-width: 100px;
-            background: #f2f2f7;
-            color: var(--text-main);
-            box-shadow: none;
-        }
-
-        .btn-small:hover {
-            background: #e8e8ec;
-        }
-
-        .btn-hide {
-            background: rgba(255, 59, 48, 0.08);
-            color: var(--warn-color);
-        }
-
-        .btn-hide:hover {
-            background: rgba(255, 59, 48, 0.14);
-        }
-
-        .library-modal .modal-card {
-            max-width: 520px;
-        }
-
-        .library-modal .modal-input,
-        .library-modal .search-input {
-            width: 100%;
-            padding: 0.9rem 1rem;
-            font-size: 1rem;
-            border: 2px solid #e5e5ea;
-            border-radius: 14px;
-            margin-bottom: 1rem;
-            outline: none;
-            resize: vertical;
-            min-height: 44px;
-        }
-
-        .library-modal .search-input:focus,
-        .library-modal .modal-input:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
-        }
-
-        .library-list {
-            max-height: 50vh;
-            overflow-y: auto;
-            display: grid;
-            gap: 1rem;
-        }
-
-        .library-group {
-            border: 1px solid #f2f2f7;
-            padding: 1rem;
-            border-radius: 16px;
-            background: #fafafa;
-        }
-
-        .library-group h3 {
-            font-size: 1rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .library-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.75rem 1rem;
-            border-radius: 14px;
-            background: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-
-        .library-item:hover {
-            background: #f2f2f7;
-        }
-
-        .library-item .item-name {
-            flex: 1;
-            text-align: left;
-            font-size: 0.95rem;
-            font-weight: 600;
-        }
-
-        .library-item .item-meta {
-            font-size: 0.87rem;
-            color: var(--text-sec);
-            white-space: nowrap;
-        }
-
-        /* Controls */
-        .controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
-        }
-
-        .btn {
-            padding: 1rem;
-            border-radius: 12px;
-            border: none;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: var(--shadow);
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .btn:active {
-            transform: scale(0.92);
-            opacity: 0.8;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-export {
-            background: white;
-            color: var(--accent-color);
-        }
-
-        .btn-import {
-            background: white;
-            color: var(--text-main);
-        }
-
-        .btn-reset {
-            grid-column: span 2;
-            background: rgba(255, 59, 48, 0.1);
-            color: var(--warn-color);
-        }
-
-        /* Modal Overlay */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .modal-card {
-            background: white;
-            padding: 2rem;
-            border-radius: var(--card-radius);
-            box-shadow: var(--shadow);
-            width: 90%;
-            max-width: 320px;
-            text-align: center;
-            transform: scale(0.9);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .modal-overlay.active .modal-card {
-            transform: scale(1);
-        }
-
-        .modal-input {
-            width: 100%;
-            padding: 1rem;
-            font-size: 1.5rem;
-            text-align: center;
-            border: 2px solid #e5e5ea;
-            border-radius: 12px;
-            margin: 1.5rem 0;
-            outline: none;
-            user-select: auto;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .modal-input:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn-cancel {
-            flex: 1;
-            background: #f2f2f7;
-            color: var(--text-main);
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .btn-save {
-            flex: 1;
-            background: var(--accent-color);
-            color: white;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .btn-cancel:hover {
-            background: #e5e5ea;
-            transform: translateY(-2px);
-        }
-
-        .btn-save:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 122, 255, 0.3);
-        }
-
-        /* Hidden file input for import */
-        #file-import {
-            display: none;
-        }
-
-        /* Toast Notification System */
-        #toast-container {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            pointer-events: none;
-        }
-
-        .toast {
-            background: rgba(0, 0, 0, 0.85);
-            color: white;
-            padding: 12px 16px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-            pointer-events: auto;
-            cursor: pointer;
-            max-width: 280px;
-            word-wrap: break-word;
-        }
-
-        .toast.success {
-            background: rgba(52, 168, 83, 0.9);
-        }
-
-        .toast.error {
-            background: rgba(255, 59, 48, 0.9);
-        }
-
-        .toast.warning {
-            background: rgba(255, 159, 64, 0.9);
-        }
-
-        .toast.exit {
-            animation: slideUpOut 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-
-        /* Particle Container */
-        #particle-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 999;
-        }
-
-        /* Morphing / Fluid Layouts */
-        @keyframes slideDownIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideUpOut {
-            from {
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-            to {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-        }
-
-        .ranking-item {
-            animation: slideDownIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-
-        .marker {
-            animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-
-        /* Smooth content transitions */
-        * {
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        /* High Quality Loading Overlay */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 3000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        .loading-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-        .loading-content {
-            background: var(--bg-color);
-            padding: 2.5rem;
-            border-radius: 28px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.2);
-            text-align: center;
-            transform: scale(0.9) translateY(10px);
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            width: 90%;
-            max-width: 320px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .loading-overlay.active .loading-content {
-            transform: scale(1) translateY(0);
-        }
-        .spinner-ring {
-            width: 54px;
-            height: 54px;
-            border: 4px solid #e5e5ea;
-            border-top: 4px solid var(--accent-color);
-            border-radius: 50%;
-            animation: spin 1s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite;
-            margin-bottom: 1.5rem;
-        }
-        [data-theme="dark"] .spinner-ring {
-            border-color: #333;
-            border-top-color: var(--accent-color);
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .loading-text {
-            font-size: 1.15rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-main);
+            max-width: 680px; margin: 0 auto;
+            padding: calc(10px + env(safe-area-inset-top)) 12px calc(48px + env(safe-area-inset-bottom));
+        }
+        #dashboard.active { display: block; }
+
+        .top { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .top h1 { flex: 1; font-size: 1.1rem; font-weight: 700; letter-spacing: -.01em; }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: var(--r);
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+        .label {
+            display: flex; align-items: center; gap: 8px;
+            font-size: .85rem; font-weight: 600; color: var(--muted);
+            margin-bottom: 10px;
+        }
+        .hint { font-size: .8rem; color: var(--muted); margin-top: 8px; line-height: 1.35; }
+        .empty { color: var(--muted); font-size: .9rem; padding: 6px 0; }
+
+        #readonly-banner {
+            display: none; align-items: center; justify-content: center; gap: 8px;
+            background: var(--danger); color: #fff; font-weight: 600; font-size: .9rem;
+            padding: 8px; border-radius: var(--r); margin-bottom: 12px;
+        }
+
+        /* ---------- Meta (Datum / Halbzeit) ---------- */
+        .meta-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .meta-row input[type="date"] {
+            height: 44px; padding: 0 10px;
+            background: var(--floor); border: 1px solid var(--line); border-radius: var(--r);
             font-variant-numeric: tabular-nums;
-            letter-spacing: 0.5px;
         }
-        .progress-bar-bg {
-            width: 100%;
-            height: 6px;
-            background: #e5e5ea;
-            border-radius: 3px;
-            overflow: hidden;
+        .seg { display: inline-flex; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+        .seg button {
+            min-width: 44px; height: 42px; padding: 0 12px;
+            border: 0; background: var(--card); font-weight: 600;
+            border-right: 1px solid var(--line);
         }
-        [data-theme="dark"] .progress-bar-bg {
-            background: #333;
+        .seg button:last-child { border-right: 0; }
+        .seg button.on { background: var(--ink); color: var(--card); }
+        .file-chip {
+            flex: 1 1 100%;
+            display: flex; align-items: center; gap: 8px;
+            font-size: .82rem; color: var(--muted);
+            font-variant-numeric: tabular-nums; word-break: break-all;
         }
-        .progress-bar-fill {
-            height: 100%;
-            background: var(--accent-color);
-            width: 0%;
-            border-radius: 3px;
-            transition: width 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+        /* ---------- Teams ---------- */
+        .teams { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+        .team-card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-left: 5px solid var(--tc);
+            border-radius: var(--r);
+            padding: 10px 10px 10px 12px;
+            display: grid; gap: 8px;
+            cursor: pointer;
+        }
+        .team-card.active { border-color: var(--tc); box-shadow: inset 0 0 0 1px var(--tc); }
+        .team-card.hidden-team { opacity: .5; }
+        .team-head { display: flex; align-items: center; gap: 6px; }
+        .team-name {
+            flex: 1; min-width: 0; width: 100%;
+            background: transparent; border: 0; border-bottom: 1px dashed transparent;
+            font-weight: 700; font-size: 1rem; padding: 2px 0; outline: none;
+        }
+        .team-name:focus { border-bottom-color: var(--muted); }
+        .team-stats { display: flex; gap: 14px; font-variant-numeric: tabular-nums; font-weight: 600; }
+        .team-stats span { display: inline-flex; align-items: center; gap: 5px; }
+        .team-stats .ic { width: 17px; height: 17px; color: var(--tc); }
+
+        /* ---------- Goal ---------- */
+        .goal-frame {
+            position: relative; aspect-ratio: 3 / 2;
+            border: 5px solid var(--ink); border-bottom: 0; border-radius: 3px 3px 0 0;
+            background-color: var(--floor);
+            background-image:
+                linear-gradient(var(--line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--line) 1px, transparent 1px);
+            background-size: 16px 16px;
+            cursor: crosshair; overflow: hidden;
+            touch-action: manipulation;
+        }
+        .goal-line { height: 3px; background: var(--ink); }
+
+        .marker {
+            position: absolute; width: 30px; height: 30px;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            display: grid; place-items: center;
+            font-size: 12px; font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            background: var(--tc); color: #fff;
+            border: 2.5px solid var(--tc);
+            cursor: pointer;
+        }
+        .marker.saved { background: var(--card); color: var(--tc); }
+        .marker.sel { outline: 2px solid var(--ink); outline-offset: 2px; }
+        .marker.pop { animation: pop .28s ease-out; }
+        @keyframes pop { from { transform: translate(-50%, -50%) scale(.4); } to { transform: translate(-50%, -50%) scale(1); } }
+
+        .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 10px; font-size: .8rem; color: var(--muted); }
+        .legend span { display: inline-flex; align-items: center; gap: 6px; }
+        .legend i { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--ink); display: inline-block; }
+        .legend i.fill { background: var(--ink); }
+
+        /* ---------- Court ---------- */
+        .court { width: 100%; display: block; border-radius: 6px; touch-action: none; }
+        .court .floor { fill: var(--floor); }
+        .court .ln { fill: none; stroke: var(--muted); stroke-width: .8; }
+        .court .ln.dash { stroke-dasharray: 3 2.5; }
+        .court .goalbox { fill: var(--ink); }
+        .curve { fill: none; stroke: var(--tc); stroke-width: 1.3; stroke-linecap: round; opacity: .85; }
+        .curve.saved { stroke-dasharray: 3 2.5; }
+        .curve.dim { opacity: .3; }
+        .curve.hl { stroke-width: 2.4; opacity: 1; }
+        .origin, .endpt { fill: var(--tc); }
+        .goal-target { fill: var(--card); stroke: var(--tc); stroke-width: 1.6; }
+        .handle { fill: var(--card); stroke: var(--ink); stroke-width: 1.4; cursor: grab; }
+
+        /* ---------- Ranking ---------- */
+        .rank-team + .rank-team { margin-top: 14px; }
+        .rank-team h3 {
+            display: flex; align-items: center; gap: 8px;
+            font-size: .95rem; font-weight: 700; margin-bottom: 4px;
+        }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--tc); display: inline-block; flex: none; }
+        .rank-row {
+            display: flex; align-items: center; gap: 12px;
+            padding: 8px 0; border-bottom: 1px solid var(--line);
+        }
+        .rank-row:last-child { border-bottom: 0; }
+        .badge {
+            width: 36px; height: 36px; border-radius: 50%;
+            display: grid; place-items: center; flex: none;
+            border: 2px solid var(--tc); color: var(--tc);
+            font-weight: 700; font-variant-numeric: tabular-nums;
+        }
+        .rank-stats { flex: 1; display: flex; gap: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+        .rank-stats span { display: inline-flex; align-items: center; gap: 5px; }
+        .rank-stats .ic { width: 17px; height: 17px; color: var(--muted); }
+        .rank-actions { display: flex; gap: 6px; }
+
+        /* ---------- Note ---------- */
+        .note-tools { display: flex; gap: 6px; margin-bottom: 8px; }
+        textarea.note {
+            width: 100%; min-height: 84px; resize: vertical;
+            padding: 10px; border-radius: var(--r);
+            background: var(--floor); border: 1px solid var(--line);
+            line-height: 1.4;
+        }
+        .note-save { display: flex; justify-content: flex-end; margin-top: 8px; }
+
+        /* ---------- Toolbar ---------- */
+        .toolbar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: space-between; }
+        .toolbar .group { display: flex; gap: 8px; }
+        #file-import { display: none; }
+
+        /* ---------- Modals ---------- */
+        .modal {
+            position: fixed; inset: 0; z-index: 2000;
+            background: rgba(10, 15, 20, .5);
+            display: flex; align-items: center; justify-content: center;
+            padding: 12px;
+            opacity: 0; pointer-events: none;
+            transition: opacity .18s ease;
+        }
+        .modal.open { opacity: 1; pointer-events: all; }
+        .sheet {
+            background: var(--card); border: 1px solid var(--line);
+            border-radius: var(--r);
+            width: 100%; max-width: 360px; max-height: 92vh; overflow-y: auto;
+            padding: 18px;
+            transform: translateY(8px); transition: transform .18s ease;
+        }
+        .modal.open .sheet { transform: none; }
+        .sheet.wide { max-width: 460px; }
+        .sheet h2 { font-size: 1.1rem; font-weight: 700; }
+        .sheet .sub { color: var(--muted); font-size: .88rem; margin: 4px 0 14px; }
+        .field {
+            width: 100%; padding: 12px; margin-bottom: 14px;
+            background: var(--floor); border: 1px solid var(--line); border-radius: var(--r);
+            font-size: 1.4rem; text-align: center; outline: none;
+        }
+        .field.text { font-size: 1rem; text-align: left; }
+        .field:focus { border-color: var(--ink); }
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px; }
+        .modal-actions .icon-btn { width: 52px; }
+
+        .team-pick { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+        .team-pick button {
+            display: flex; align-items: center; gap: 8px; justify-content: center;
+            height: 44px; padding: 0 10px;
+            border: 1px solid var(--line); border-radius: var(--r);
+            background: var(--card); font-weight: 600;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .team-pick button.on { border-color: var(--tc); box-shadow: inset 0 0 0 1px var(--tc); }
+
+        .outcome { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+        .outcome button {
+            display: grid; place-items: center; gap: 2px; padding: 8px;
+            border: 1px solid var(--line); border-radius: var(--r);
+            background: var(--card); font-size: .8rem; font-weight: 600; color: var(--muted);
+        }
+        .outcome button.on { background: var(--ink); color: var(--card); border-color: var(--ink); }
+
+        .pick-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: .85rem; font-weight: 600; color: var(--muted); }
+
+        /* ---------- Library ---------- */
+        .library-list { max-height: 52vh; overflow-y: auto; display: grid; gap: 12px; margin-top: 10px; }
+        .lib-group { border: 1px solid var(--line); border-radius: var(--r); padding: 12px; background: var(--floor); }
+        .lib-group h3 { font-size: .95rem; font-weight: 700; }
+        .g-line { display: flex; align-items: center; gap: 8px; font-size: .82rem; color: var(--muted); margin-top: 4px; font-variant-numeric: tabular-nums; }
+        .lib-items { display: grid; gap: 6px; margin-top: 10px; }
+        .lib-item { display: flex; gap: 6px; align-items: stretch; }
+        .lib-load {
+            flex: 1; min-width: 0; text-align: left;
+            display: grid; gap: 2px; padding: 8px 12px;
+            background: var(--card); border: 1px solid var(--line); border-radius: var(--r);
+        }
+        .lib-load .n { font-weight: 600; font-size: .9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .lib-load .m { font-size: .8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+        .search {
+            width: 100%; padding: 10px 12px;
+            background: var(--floor); border: 1px solid var(--line); border-radius: var(--r);
+            outline: none;
+        }
+        .search:focus { border-color: var(--ink); }
+        #library-status { color: var(--muted); font-size: .85rem; margin-top: 8px; min-height: 1.2em; }
+
+        .seq-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+        .seq-row:last-child { border-bottom: 0; }
+        .seq-row .idx { width: 28px; color: var(--muted); font-size: .85rem; }
+        .seq-row .nr { font-weight: 700; flex: 1; }
+        .seq-row .tm { color: var(--muted); font-size: .85rem; }
+        .seq-row .ic { width: 17px; height: 17px; color: var(--muted); }
+
+        /* ---------- Loading ---------- */
+        #loading-overlay {
+            position: fixed; inset: 0; z-index: 3000; background: rgba(10, 15, 20, .55);
+            display: none; align-items: center; justify-content: center;
+        }
+        #loading-overlay.active { display: flex; }
+        .spinner {
+            width: 44px; height: 44px; border-radius: 50%;
+            border: 4px solid var(--line); border-top-color: var(--ink);
+            animation: spin .8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ---------- Toasts ---------- */
+        #toast-container {
+            position: fixed; left: 0; right: 0; bottom: calc(16px + env(safe-area-inset-bottom));
+            z-index: 9999; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            pointer-events: none;
+        }
+        .toast {
+            background: var(--ink); color: var(--card);
+            padding: 10px 14px; border-radius: var(--r);
+            font-size: .88rem; font-weight: 500; max-width: 90vw;
+            animation: toastIn .2s ease-out;
+        }
+        .toast.success { background: var(--ok); color: #fff; }
+        .toast.error { background: var(--danger); color: #fff; }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+
+        /* ---------- Logo, Kopfzeile, Notiz-Kopf ---------- */
+        .logo { width: 34px; height: 34px; flex: none; border-radius: 8px; }
+        .top { flex-wrap: wrap; }
+        #readonly-banner {
+            display: none; align-items: center; gap: 6px;
+            background: var(--danger); color: #fff; font-weight: 600; font-size: .8rem;
+            padding: 4px 10px; border-radius: 999px; margin: 0;
+        }
+        #readonly-banner .ic { width: 15px; height: 15px; }
+        .label .legend { margin: 0 0 0 auto; }
+        .note-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .note-head .label-text { flex: 1; font-size: .85rem; font-weight: 600; color: var(--muted); }
+        .note-head .note-tools { margin: 0; }
+        .goal-stage { width: 100%; }
+        .sheet.shot-sheet .pick-right .court { width: 100%; }
+
+        /* ---------- Desktop: alles auf einem Bildschirm ---------- */
+        @media (min-width: 900px) and (min-height: 540px) {
+            html, body { height: 100%; overflow: hidden; }
+            #dashboard.active {
+                display: grid; max-width: none; margin: 0;
+                height: 100vh; height: 100dvh;
+                padding: 12px 16px; gap: 12px;
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 380px;
+                grid-template-rows: auto auto minmax(0, 1fr) auto;
+                grid-template-areas:
+                    "top   meta  tools"
+                    "teams teams rank"
+                    "goal  court rank"
+                    "note  note  rank";
+            }
+            #dashboard > * { margin: 0; min-width: 0; min-height: 0; }
+            .top { grid-area: top; align-self: center; flex-wrap: nowrap; }
+            .meta-card { grid-area: meta; padding: 8px 12px; align-self: stretch; display: flex; align-items: center; }
+            .meta-card .meta-row { gap: 8px 10px; width: 100%; }
+            .meta-card .file-chip { flex: 1 1 100%; }
+            .toolbar { grid-area: tools; align-self: center; flex-wrap: nowrap; }
+            #teams { grid-area: teams; gap: 12px; margin: 0; }
+            .team-card { padding: 8px 10px 8px 12px; gap: 4px; }
+            .goal-card { grid-area: goal; }
+            .court-card { grid-area: court; }
+            .rank-card { grid-area: rank; }
+            .note-card { grid-area: note; padding: 10px 14px; }
+            .note-card textarea.note { height: 52px; min-height: 0; resize: none; }
+
+            .goal-card, .court-card, .rank-card { display: flex; flex-direction: column; }
+            .goal-card .hint, .court-card .hint { display: none; }
+            .goal-wrap, .court-wrap {
+                flex: 1; min-height: 0;
+                container-type: size;
+                display: grid; place-items: center;
+            }
+            .goal-stage { width: min(100cqw, calc(150cqh - 5px)); }
+            .court-wrap .court { width: min(100cqw, 144.9cqh); height: auto; aspect-ratio: 200 / 138; }
+            #ranking { flex: 1; min-height: 0; overflow-y: auto; }
+        }
+
+        /* Wurf-Dialog: Steuerung links, Feld rechts */
+        @media (min-width: 760px) {
+            .sheet.shot-sheet {
+                max-width: 800px;
+                display: grid; align-items: start;
+                grid-template-columns: 250px minmax(0, 1fr);
+                grid-template-areas: "left right" "actions right";
+                column-gap: 20px;
+            }
+            .pick-left { grid-area: left; }
+            .pick-right { grid-area: right; }
+            .shot-sheet > .modal-actions { grid-area: actions; align-self: end; margin-top: 0; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation: none !important; transition: none !important; }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- Toast Container -->
+    <!-- Icon sprite -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <defs>
+            <symbol id="i-logo" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#1a2430"/><path d="M35 29L11 53" stroke="#f2b632" stroke-width="3.4" stroke-linecap="round"/><path d="M25 22L10 37" stroke="#f2b632" stroke-width="2.4" stroke-linecap="round" opacity=".55"/><path d="M43 39L30 52" stroke="#f2b632" stroke-width="2.4" stroke-linecap="round" opacity=".55"/><polygon points="42.00,8.00 45.41,17.31 55.31,17.67 47.52,23.79 50.23,33.33 42.00,27.80 33.77,33.33 36.48,23.79 28.69,17.67 38.59,17.31" fill="#f2b632" stroke="#f2b632" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+            <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+            <symbol id="i-contrast" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></symbol>
+            <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></symbol>
+            <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></symbol>
+            <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V5m0 0-4 4m4-4 4 4M5 20h14"/></symbol>
+            <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+            <symbol id="i-reset" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></symbol>
+            <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+            <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path d="M4 4l16 16"/></symbol>
+            <symbol id="i-crosshair" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5"/></symbol>
+            <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></symbol>
+            <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+            <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+            <symbol id="i-ball" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8.2l3.2 2.3-1.2 3.7h-4l-1.2-3.7z"/></symbol>
+            <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></symbol>
+            <symbol id="i-curve" viewBox="0 0 24 24"><path d="M4 19c3-12 13-12 16 0"/><circle cx="4" cy="19" r="1.6"/></symbol>
+            <symbol id="i-bold" viewBox="0 0 24 24"><path d="M7 5h6a3.5 3.5 0 0 1 0 7H7zM7 12h7a3.5 3.5 0 0 1 0 7H7z"/></symbol>
+            <symbol id="i-italic" viewBox="0 0 24 24"><path d="M10 5h8M6 19h8M15 5L9 19"/></symbol>
+            <symbol id="i-bullet" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></symbol>
+            <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></symbol>
+            <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v4h4"/></symbol>
+            <symbol id="i-court" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 4v0M8 4a4 4 0 0 0 8 0"/></symbol>
+        </defs>
+    </svg>
+
     <div id="toast-container"></div>
 
-    <!-- Particle Container -->
-    <div id="particle-container"></div>
+    <div id="loading-overlay"><div class="spinner"></div></div>
 
-    <!-- High Quality Loading Screen -->
-    <div id="loading-overlay" class="loading-overlay">
-        <div class="loading-content">
-            <div class="spinner-ring"></div>
-            <div class="loading-text" id="loading-text">Downloading... 0%</div>
-            <div class="progress-bar-bg">
-                <div class="progress-bar-fill" id="progress-bar-fill"></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="login-screen" onclick="focusPin()">
+    <!-- Login -->
+    <div id="login-screen" onclick="document.getElementById('pin-input').focus()">
         <div class="login-card">
-            <h1 data-i18n="appTitle">Scouting Pro</h1>
-            <p class="text-secondary" data-i18n="pinReq">Eingabe PIN erforderlich</p>
-            <input type="password" id="pin-input" class="pin-input" maxlength="4" pattern="\d*" inputmode="numeric">
+            <img src="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2064%2064%22%3E%3Crect%20width=%2264%22%20height=%2264%22%20rx=%2214%22%20fill=%22%231a2430%22/%3E%3Cpath%20d=%22M35%2029L11%2053%22%20stroke=%22%23f2b632%22%20stroke-width=%223.4%22%20stroke-linecap=%22round%22/%3E%3Cpath%20d=%22M25%2022L10%2037%22%20stroke=%22%23f2b632%22%20stroke-width=%222.4%22%20stroke-linecap=%22round%22%20opacity=%22.55%22/%3E%3Cpath%20d=%22M43%2039L30%2052%22%20stroke=%22%23f2b632%22%20stroke-width=%222.4%22%20stroke-linecap=%22round%22%20opacity=%22.55%22/%3E%3Cpolygon%20points=%2242.00%2C8.00%2045.41%2C17.31%2055.31%2C17.67%2047.52%2C23.79%2050.23%2C33.33%2042.00%2C27.80%2033.77%2C33.33%2036.48%2C23.79%2028.69%2C17.67%2038.59%2C17.31%22%20fill=%22%23f2b632%22%20stroke=%22%23f2b632%22%20stroke-width=%221.5%22%20stroke-linejoin=%22round%22/%3E%3C/svg%3E" alt="">
+            <h1>Scouting Pro</h1>
+            <p data-i18n="pinReq">PIN eingeben</p>
+            <input type="password" id="pin-input" class="pin-input" maxlength="4" inputmode="numeric" pattern="\d*" autocomplete="off">
         </div>
     </div>
 
     <!-- Dashboard -->
     <div id="dashboard">
-        <div class="header" style="grid-template-columns: auto 1fr auto auto;">
-            <div class="library-launcher">
-                <button class="btn btn-export" onclick="openLibrary()" data-i18n="cloudLib">Cloud Library</button>
-            </div>
-            <h2 data-i18n="liveAnalysis">Live Analyse</h2>
-            <div style="display: flex; gap: 0.5rem; align-items: center;">
-                <button class="btn btn-small" onclick="toggleTheme()"
-                    style="font-size:1.2rem; padding:0.4rem; background:transparent;">🌓</button>
-                <button class="btn btn-small" onclick="toggleLanguage()" id="lang-btn"
-                    style="padding:0.4rem; background:var(--accent-color); color:white;">EN</button>
-            </div>
-            <div class="stat-badge">
-                <span data-i18n="shots">Würfe</span>: <span id="total-shots">0</span>
-            </div>
-        </div>
+        <header class="top">
+            <svg class="logo" aria-hidden="true"><use href="#i-logo"/></svg>
+            <h1>Scouting Pro</h1>
+            <span id="readonly-banner"><svg class="ic"><use href="#i-lock"/></svg><span data-i18n="roBanner">Schreibgeschützt</span></span>
+            <button class="icon-btn" id="btn-lib" data-i18n-title="tLib"><svg class="ic"><use href="#i-folder"/></svg></button>
+            <button class="icon-btn" id="btn-theme" data-i18n-title="tTheme"><svg class="ic"><use href="#i-contrast"/></svg></button>
+            <button class="icon-btn" id="btn-lang" data-i18n-title="tLang"><svg class="ic"><use href="#i-globe"/></svg></button>
+        </header>
 
-        <div id="readonly-banner"
-            style="display:none; background:var(--warn-color); color:white; text-align:center; padding:0.5rem; border-radius:12px; margin-bottom:1rem; font-weight:bold;"
-            data-i18n="readonlyActive">Schreibgeschützt</div>
-
-        <div class="goal-container">
-            <p class="text-secondary" style="margin-bottom: 0.5rem; text-align: center;">Torfläche antippen für Marker,
-                Doppelklick auf Marker zum Entfernen</p>
-            <div class="goal-frame" id="goal-frame">
-                <!-- Markers go here -->
+        <section class="card meta-card">
+            <div class="meta-row">
+                <input type="date" id="meta-date" data-i18n-title="tDate">
+                <div class="seg" id="meta-half" role="group" data-i18n-title="tHalf">
+                    <button data-half="1">1</button><button data-half="2">2</button><button data-half="3">3</button><button data-half="4">4</button>
+                </div>
+                <div class="file-chip"><svg class="ic" style="width:16px;height:16px"><use href="#i-file"/></svg><span id="file-chip"></span></div>
             </div>
-            <div class="goal-line"></div>
-        </div>
+        </section>
 
-        <div class="ranking-card">
-            <h2 data-i18n="topScorer">Top Scorer</h2>
-            <ul class="ranking-list" id="ranking-list">
-                <!-- Dynamic ranking items -->
-            </ul>
-        </div>
+        <section class="teams" id="teams"></section>
 
-        <div class="note-card">
-            <h2 data-i18n="gameNote">Spielnotiz</h2>
-            <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;" id="note-toolbar">
-                <button class="btn btn-small" onclick="insertNoteFormat('**', '**')"><b>B</b></button>
-                <button class="btn btn-small" onclick="insertNoteFormat('*', '*')"><i>I</i></button>
-                <button class="btn btn-small" onclick="insertNoteFormat('• ', '')">•</button>
+        <section class="card goal-card">
+            <div class="label">
+                <svg class="ic" style="width:18px;height:18px"><use href="#i-ball"/></svg><span data-i18n="goalView">Torbild</span>
+                <div class="legend">
+                    <span><i class="fill"></i><span data-i18n="goal">Tor</span></span>
+                    <span><i></i><span data-i18n="saved">Gehalten</span></span>
+                </div>
             </div>
-            <textarea id="game-note" class="modal-input" placeholder="Optionale Anmerkung für dieses Spiel"></textarea>
-            <button class="btn btn-save" onclick="saveGameNote()" data-i18n="saveNote">Notiz speichern</button>
-        </div>
+            <div class="goal-wrap">
+                <div class="goal-stage">
+                    <div class="goal-frame" id="goal-frame" data-i18n-title="goalHint"></div>
+                    <div class="goal-line"></div>
+                </div>
+            </div>
+            <p class="hint" data-i18n="goalHint">Torfläche antippen, um einen Wurf zu setzen. Marker doppelt antippen zum Löschen.</p>
+        </section>
 
-        <div class="controls">
-            <label
-                style="grid-column: span 2; display: flex; align-items: center; gap: 0.5rem; justify-content: center; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 12px;">
-                <input type="checkbox" id="export-readonly" style="width: 18px; height: 18px;">
-                <span data-i18n="exportReadonly">Als Schreibgeschützt exportieren</span>
-            </label>
-            <button class="btn btn-export" onclick="exportData()" data-i18n="exportData">Daten Exportieren</button>
-            <button class="btn btn-import" onclick="document.getElementById('file-import').click()"
-                data-i18n="importData">Daten
-                Importieren</button>
-            <button class="btn btn-reset" onclick="resetFilters()" data-i18n="resetFilter">Filter zurücksetzen</button>
-            <button class="btn btn-reset" onclick="hardReset()" data-i18n="hardReset">Hard-Reset (Löschen)</button>
-        </div>
-        <input type="file" id="file-import" accept=".json" onchange="importData(event)">
+        <section class="card court-card">
+            <div class="label"><svg class="ic" style="width:18px;height:18px"><use href="#i-curve"/></svg><span data-i18n="courtView">Flugkurven</span></div>
+            <div class="court-wrap">
+                <svg class="court" id="court" viewBox="0 -8 200 138" data-i18n-title="courtHint"></svg>
+            </div>
+            <p class="hint" data-i18n="courtHint">Kurven erscheinen, sobald beim Wurf eine Position eingetragen wurde. Marker antippen hebt die Kurve hervor.</p>
+        </section>
+
+        <section class="card rank-card">
+            <div class="label"><svg class="ic" style="width:18px;height:18px"><use href="#i-list"/></svg><span data-i18n="ranking">Würfe pro Spieler</span></div>
+            <div id="ranking"></div>
+        </section>
+
+        <section class="card note-card">
+            <div class="note-head">
+                <span class="label-text" data-i18n="gameNote">Spielnotiz</span>
+                <div class="note-tools" id="note-toolbar">
+                    <button class="icon-btn sm" data-fmt="**" data-i18n-title="tBold"><svg class="ic"><use href="#i-bold"/></svg></button>
+                    <button class="icon-btn sm" data-fmt="*" data-i18n-title="tItalic"><svg class="ic"><use href="#i-italic"/></svg></button>
+                    <button class="icon-btn sm" data-fmt="• " data-end="" data-i18n-title="tBullet"><svg class="ic"><use href="#i-bullet"/></svg></button>
+                </div>
+                <button class="icon-btn sm primary" id="btn-save-note" data-i18n-title="tSaveNote"><svg class="ic"><use href="#i-check"/></svg></button>
+            </div>
+            <textarea id="game-note" class="note" data-i18n-ph="notePh" placeholder="Anmerkung zu diesem Spiel"></textarea>
+        </section>
+
+        <section class="toolbar">
+            <div class="group">
+                <button class="icon-btn" id="btn-export" data-i18n-title="tExport"><svg class="ic"><use href="#i-download"/></svg></button>
+                <button class="icon-btn" id="btn-import" data-i18n-title="tImport"><svg class="ic"><use href="#i-upload"/></svg></button>
+                <button class="icon-btn" id="btn-ro" data-i18n-title="tRo"><svg class="ic"><use href="#i-lock"/></svg></button>
+            </div>
+            <div class="group">
+                <button class="icon-btn" id="btn-reset-filter" data-i18n-title="tResetFilter"><svg class="ic"><use href="#i-reset"/></svg></button>
+                <button class="icon-btn danger" id="btn-hard-reset" data-i18n-title="tHardReset"><svg class="ic"><use href="#i-trash"/></svg></button>
+            </div>
+        </section>
+        <input type="file" id="file-import" accept=".json">
     </div>
 
-    <!-- Number Input Modal -->
-    <div class="modal-overlay" id="number-modal">
-        <div class="modal-card">
-            <h2 data-i18n="jerseyNumber">Rückennummer</h2>
-            <p class="text-secondary" data-i18n="enterOpponent">Gegnerischen Werfer eingeben</p>
-            <input type="number" id="jersey-input" class="modal-input" pattern="\d*" inputmode="numeric">
-
-            <div style="display:flex; gap:1rem; margin-bottom:1.5rem; justify-content:center;">
-                <label
-                    style="display:flex; align-items:center; gap:0.5rem; color:var(--success-color); font-weight:bold;">
-                    <input type="radio" name="shot-outcome" value="goal" checked> <span data-i18n="goal">Tor</span>
-                </label>
-                <label style="display:flex; align-items:center; gap:0.5rem; color:var(--warn-color); font-weight:bold;">
-                    <input type="radio" name="shot-outcome" value="saved"> <span data-i18n="saved">Gehalten</span>
-                </label>
+    <!-- Wurf-Dialog -->
+    <div class="modal" id="number-modal">
+        <div class="sheet wide shot-sheet">
+            <div class="pick-left">
+                <div class="team-pick" id="pick-team"></div>
+                <input type="number" id="jersey-input" class="field" inputmode="numeric" pattern="\d*" data-i18n-ph="jersey" placeholder="Rückennummer">
+                <div class="outcome" id="pick-outcome">
+                    <button data-o="goal" class="on"><svg class="ic"><use href="#i-ball"/></svg><span data-i18n="goal">Tor</span></button>
+                    <button data-o="saved"><svg class="ic"><use href="#i-shield"/></svg><span data-i18n="saved">Gehalten</span></button>
+                </div>
             </div>
-
+            <div class="pick-right">
+                <div class="pick-head">
+                    <span data-i18n="throwPos">Wurfposition (optional)</span>
+                    <button class="icon-btn sm" id="btn-clear-origin" data-i18n-title="tClearOrigin"><svg class="ic"><use href="#i-x"/></svg></button>
+                </div>
+                <svg class="court" id="pick-court" viewBox="0 -8 200 138"></svg>
+                <p class="hint" data-i18n="pickHint">Antippen setzt den Abwurfpunkt. Den Kreis in der Kurvenmitte ziehen, um den Bogen zu formen.</p>
+            </div>
             <div class="modal-actions">
-                <button class="btn btn-cancel" onclick="closeModal()" data-i18n="cancel">Abbrechen</button>
-                <button class="btn btn-save" onclick="saveShot()" data-i18n="save">Speichern</button>
+                <button class="icon-btn" id="btn-cancel-shot" data-i18n-title="tCancel"><svg class="ic"><use href="#i-x"/></svg></button>
+                <button class="icon-btn primary" id="btn-save-shot" data-i18n-title="tSave"><svg class="ic"><use href="#i-check"/></svg></button>
             </div>
         </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
-    <div class="modal-overlay" id="delete-modal">
-        <div class="modal-card">
-            <h2>Tor entfernen</h2>
-            <p class="text-secondary">Geben Sie die Nummer ein, um den Marker zu löschen</p>
-            <input type="number" id="delete-confirm-input" class="modal-input" pattern="\d*" inputmode="numeric">
+    <!-- Löschen -->
+    <div class="modal" id="delete-modal">
+        <div class="sheet">
+            <h2 data-i18n="delTitle">Wurf löschen</h2>
+            <p class="sub" id="delete-sub"></p>
+            <input type="number" id="delete-confirm-input" class="field" inputmode="numeric" pattern="\d*">
             <div class="modal-actions">
-                <button class="btn btn-cancel" onclick="closeDeleteModal()">Abbrechen</button>
-                <button class="btn btn-save" onclick="confirmRemoveShot()">Löschen</button>
-            </div>
-        </div>
-    </div>
-    <!-- Hard Reset Confirmation Modal -->
-    <div class="modal-overlay" id="reset-modal">
-        <div class="modal-card">
-            <h2>Hard-Reset</h2>
-            <p class="text-secondary">Alle Daten werden gelöscht. Bitte tippen Sie <strong>CONFIRM</strong> ein, um fortzufahren.</p>
-            <input type="text" id="reset-confirm-input" class="modal-input" placeholder="CONFIRM">
-            <div class="modal-actions">
-                <button class="btn btn-cancel" onclick="closeResetModal()">Abbrechen</button>
-                <button class="btn btn-save" style="background:var(--warn-color);" onclick="executeHardReset()">Löschen</button>
+                <button class="icon-btn" id="btn-cancel-delete" data-i18n-title="tCancel"><svg class="ic"><use href="#i-x"/></svg></button>
+                <button class="icon-btn danger-fill" id="btn-confirm-delete" data-i18n-title="tDelete"><svg class="ic"><use href="#i-trash"/></svg></button>
             </div>
         </div>
     </div>
 
-    <!-- Cloud Library Modal -->
-    <div class="modal-overlay library-modal" id="library-modal">
-        <div class="modal-card">
+    <!-- Hard-Reset -->
+    <div class="modal" id="reset-modal">
+        <div class="sheet">
+            <h2 data-i18n="resetTitle">Alle Daten löschen</h2>
+            <p class="sub" data-i18n="resetSub">Tippe CONFIRM ein, um alle lokalen Daten zu löschen.</p>
+            <input type="text" id="reset-confirm-input" class="field text" placeholder="CONFIRM" autocomplete="off">
+            <div class="modal-actions">
+                <button class="icon-btn" id="btn-cancel-reset" data-i18n-title="tCancel"><svg class="ic"><use href="#i-x"/></svg></button>
+                <button class="icon-btn danger-fill" id="btn-confirm-reset" data-i18n-title="tDelete"><svg class="ic"><use href="#i-trash"/></svg></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cloud Library -->
+    <div class="modal" id="library-modal">
+        <div class="sheet wide">
             <h2>Cloud Library</h2>
-            <p class="text-secondary">Alle verfügbaren Spiele aus dem Repository laden</p>
-            <input type="text" id="library-search" class="search-input" placeholder="Nach Spielnamen suchen..."
-                oninput="renderLibraryList()">
-            <div id="library-status" class="text-secondary" style="margin-bottom: 1rem; font-size: 0.95rem;"></div>
+            <p class="sub" data-i18n="libSub">Gespeicherte Spiele aus dem Repository</p>
+            <input type="text" id="library-search" class="search" data-i18n-ph="search" placeholder="Suchen">
+            <div id="library-status"></div>
             <div class="library-list" id="library-list"></div>
             <div class="modal-actions">
-                <button class="btn btn-cancel" onclick="closeLibrary()">Schließen</button>
+                <button class="icon-btn" id="btn-close-lib" data-i18n-title="tClose"><svg class="ic"><use href="#i-x"/></svg></button>
             </div>
         </div>
     </div>
 
-    <!-- Shot Sequence Modal -->
-    <div class="modal-overlay library-modal" id="sequence-modal">
-        <div class="modal-card">
-            <h2 id="sequence-title">Torfolge</h2>
-            <p class="text-secondary">Alle Tore in zeitlicher Reihenfolge</p>
-            <div class="library-list" id="sequence-list" style="max-height: 60vh; margin-bottom: 1rem;"></div>
+    <!-- Torfolge -->
+    <div class="modal" id="sequence-modal">
+        <div class="sheet">
+            <h2 id="sequence-title"></h2>
+            <div id="sequence-list" style="max-height:60vh; overflow-y:auto; margin-top:10px;"></div>
             <div class="modal-actions">
-                <button class="btn btn-cancel" onclick="closeSequence()">Schließen</button>
+                <button class="icon-btn" id="btn-close-seq" data-i18n-title="tClose"><svg class="ic"><use href="#i-x"/></svg></button>
             </div>
         </div>
     </div>
 
     <script>
-        /**
-         * State Management
-         */
-        const GITHUB_LIBRARY = {
-            owner: 'gamer752redit',
-            repo: 'handball-manager',
-            branch: 'main'
+        /* =========================================================
+           Konstanten & Hilfsfunktionen
+           ========================================================= */
+        const GITHUB_LIBRARY = { owner: 'gamer752redit', repo: 'handball-manager', branch: 'main' };
+        const CORRECT_PIN = '7521';
+        const STORAGE_KEY = 'handball_shots';          // altes Speichersystem bleibt
+        const $ = id => document.getElementById(id);
+
+        const MONTHS = ['jan', 'feb', 'mrz', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dez'];
+        const MONTH_ALIASES = {
+            januar: 0, jan: 0, februar: 1, feb: 1, märz: 2, maerz: 2, mär: 2, mrz: 2, mar: 2,
+            april: 3, apr: 3, mai: 4, juni: 5, jun: 5, juli: 6, jul: 6, august: 7, aug: 7,
+            september: 8, sep: 8, sept: 8, oktober: 9, okt: 9, november: 10, nov: 10, dezember: 11, dez: 11
         };
 
-        let libraryFiles = [];
-        let libraryLoaded = false;
-        let libraryFileShotCounts = {}; // Cache: { 'filename': { count: N, goal30: num, goal40: num, shots: [...] } }
+        const pad = n => String(n).padStart(2, '0');
+        const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+        const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const icon = (n, cls = '') => `<svg class="ic ${cls}"><use href="#i-${n}"/></svg>`;
 
-        let state = {
-            shots: [], // { x: %, y: %, number: string, outcome: string, timestamp: number }
-            gameNote: '',
-            filters: {
-                showOnly: null,
-                hiddenNumbers: []
-            },
-            settings: {
-                readOnly: false
+        /** Dateiname im Format der Cloud Library: handball_scout_12-mai-26_halb1.json */
+        function dateToken(iso) {
+            const [y, m, d] = iso.split('-').map(Number);
+            return `${d}-${MONTHS[m - 1]}-${pad(y % 100)}`;
+        }
+        function buildFileName() {
+            return `handball_scout_${dateToken(state.meta.date)}_halb${state.meta.half}.json`;
+        }
+        function parseMetaFromName(name) {
+            const m = name.match(/(\d+)-([a-zäöü]+)-(\d{2})/i);
+            const h = name.match(/halb(\d+)/i);
+            const out = {};
+            if (m) {
+                const mi = MONTH_ALIASES[m[2].toLowerCase()];
+                if (mi !== undefined) out.date = `${2000 + Number(m[3])}-${pad(mi + 1)}-${pad(Number(m[1]))}`;
             }
-        };
+            if (h) out.half = Math.min(4, Math.max(1, parseInt(h[1], 10)));
+            return out;
+        }
 
-        let tempShot = null; // Store coords temporarily while modal is open
-        let pendingDeleteIndex = null;
+        /* =========================================================
+           Sprache
+           ========================================================= */
         let currentLang = 'de';
-        let audioCtx = null;
-
-        const i18nDict = {
+        const I18N = {
             de: {
-                appTitle: "Scouting Pro", pinReq: "Eingabe PIN erforderlich", cloudLib: "Cloud Library",
-                liveAnalysis: "Live Analyse", shots: "Würfe", topScorer: "Top Scorer",
-                gameNote: "Spielnotiz", saveNote: "Notiz speichern", exportReadonly: "Als Schreibgeschützt exportieren",
-                exportData: "Daten Exportieren", importData: "Daten Importieren", resetFilter: "Filter zurücksetzen",
-                hardReset: "Hard-Reset (Löschen)", jerseyNumber: "Rückennummer", enterOpponent: "Gegnerischen Werfer eingeben",
-                goal: "Tor", saved: "Gehalten", cancel: "Abbrechen", save: "Speichern", readonlyActive: "Schreibgeschützt"
+                pinReq: 'PIN eingeben', live: 'Live-Analyse', roBanner: 'Schreibgeschützt',
+                goalView: 'Torbild', goal: 'Tor', saved: 'Gehalten',
+                goalHint: 'Torfläche antippen, um einen Wurf zu setzen. Marker doppelt antippen zum Löschen.',
+                courtView: 'Flugkurven',
+                courtHint: 'Kurven erscheinen, sobald beim Wurf eine Position eingetragen wurde. Marker antippen hebt die Kurve hervor.',
+                ranking: 'Würfe pro Spieler', gameNote: 'Spielnotiz', notePh: 'Anmerkung zu diesem Spiel',
+                jersey: 'Rückennummer', throwPos: 'Wurfposition (optional)',
+                pickHint: 'Antippen setzt den Abwurfpunkt. Den Kreis in der Kurvenmitte ziehen, um den Bogen zu formen. Tasten: A/B Team, T Tor, H Gehalten, Enter speichern.',
+                delTitle: 'Wurf löschen', delSub: 'Rückennummer {n} ({team}) zur Bestätigung eingeben',
+                resetTitle: 'Alle Daten löschen', resetSub: 'Tippe CONFIRM ein, um alle lokalen Daten zu löschen.',
+                libSub: 'Gespeicherte Spiele aus dem Repository', search: 'Suchen',
+                noData: 'Keine Daten', noFiles: 'Keine Dateien gefunden.',
+                g30: '30. Tor', g40: '40. Tor', half: 'Halbzeit', goals: 'Tore', seqTitle: 'Torfolge',
+                tLib: 'Cloud Library', tTheme: 'Hell/Dunkel', tLang: 'Sprache', tDate: 'Spieldatum', tHalf: 'Halbzeit',
+                tBold: 'Fett', tItalic: 'Kursiv', tBullet: 'Aufzählung', tSaveNote: 'Notiz speichern',
+                tExport: 'Exportieren', tImport: 'Importieren', tRo: 'Export schreibgeschützt',
+                tResetFilter: 'Filter zurücksetzen', tHardReset: 'Alle Daten löschen',
+                tCancel: 'Abbrechen', tSave: 'Speichern', tDelete: 'Löschen', tClose: 'Schließen',
+                tClearOrigin: 'Position entfernen', tSolo: 'Nur diesen Spieler zeigen', tHide: 'Ein- oder ausblenden',
+                tSeq: 'Torfolge', tTeamVis: 'Team ein- oder ausblenden',
+                toastNote: 'Notiz gespeichert.', toastExported: 'Exportiert: {f}', toastImported: 'Daten importiert.',
+                toastBadFile: 'Ungültiges Dateiformat.', toastReadErr: 'Datei konnte nicht gelesen werden.',
+                toastNoShots: 'Keine Würfe zum Exportieren.', toastNeedNum: 'Bitte eine Rückennummer eingeben.',
+                toastDeleted: 'Wurf von Nr. {n} gelöscht.', toastMismatch: 'Nummer stimmt nicht überein.',
+                toastFilter: 'Filter zurückgesetzt.', toastLoaded: 'Geladen: {f}', toastLibErr: 'Cloud Library konnte nicht geladen werden.',
+                toastConfirm: 'Bitte exakt CONFIRM eingeben.', toastRoOn: 'Export wird schreibgeschützt.', toastRoOff: 'Export bleibt bearbeitbar.',
+                loadList: 'Lade Dateiliste …', loadGames: 'Lade Spieldaten …', filesFound: '{n} Dateien gefunden.',
+                teamA: 'Team A', teamB: 'Team B'
             },
             en: {
-                appTitle: "Scouting Pro", pinReq: "PIN Required", cloudLib: "Cloud Library",
-                liveAnalysis: "Live Analysis", shots: "Shots", topScorer: "Top Scorer",
-                gameNote: "Game Note", saveNote: "Save Note", exportReadonly: "Export as Read-Only",
-                exportData: "Export Data", importData: "Import Data", resetFilter: "Reset Filters",
-                hardReset: "Hard Reset (Delete)", jerseyNumber: "Jersey Number", enterOpponent: "Enter opponent shooter",
-                goal: "Goal", saved: "Saved", cancel: "Cancel", save: "Save", readonlyActive: "Read-Only Active"
+                pinReq: 'Enter PIN', live: 'Live analysis', roBanner: 'Read-only',
+                goalView: 'Goal view', goal: 'Goal', saved: 'Saved',
+                goalHint: 'Tap the goal to place a shot. Double-tap a marker to delete it.',
+                courtView: 'Flight paths',
+                courtHint: 'Paths show up once a throw position was entered. Tap a marker to highlight its path.',
+                ranking: 'Shots per player', gameNote: 'Game note', notePh: 'Note for this game',
+                jersey: 'Jersey number', throwPos: 'Throw position (optional)',
+                pickHint: 'Tap to set the release point. Drag the circle at the middle of the path to shape the arc. Keys: A/B team, T goal, H saved, Enter to save.',
+                delTitle: 'Delete shot', delSub: 'Enter jersey number {n} ({team}) to confirm',
+                resetTitle: 'Delete all data', resetSub: 'Type CONFIRM to delete all local data.',
+                libSub: 'Saved games from the repository', search: 'Search',
+                noData: 'No data', noFiles: 'No files found.',
+                g30: '30th goal', g40: '40th goal', half: 'Half', goals: 'goals', seqTitle: 'Goal sequence',
+                tLib: 'Cloud library', tTheme: 'Light/dark', tLang: 'Language', tDate: 'Game date', tHalf: 'Half',
+                tBold: 'Bold', tItalic: 'Italic', tBullet: 'Bullet', tSaveNote: 'Save note',
+                tExport: 'Export', tImport: 'Import', tRo: 'Export as read-only',
+                tResetFilter: 'Reset filters', tHardReset: 'Delete all data',
+                tCancel: 'Cancel', tSave: 'Save', tDelete: 'Delete', tClose: 'Close',
+                tClearOrigin: 'Remove position', tSolo: 'Show only this player', tHide: 'Show or hide',
+                tSeq: 'Goal sequence', tTeamVis: 'Show or hide team',
+                toastNote: 'Note saved.', toastExported: 'Exported: {f}', toastImported: 'Data imported.',
+                toastBadFile: 'Invalid file format.', toastReadErr: 'Could not read the file.',
+                toastNoShots: 'No shots to export.', toastNeedNum: 'Please enter a jersey number.',
+                toastDeleted: 'Shot of no. {n} deleted.', toastMismatch: 'Number does not match.',
+                toastFilter: 'Filters reset.', toastLoaded: 'Loaded: {f}', toastLibErr: 'Could not load the cloud library.',
+                toastConfirm: 'Please type CONFIRM exactly.', toastRoOn: 'Export will be read-only.', toastRoOff: 'Export stays editable.',
+                loadList: 'Loading file list …', loadGames: 'Loading games …', filesFound: '{n} files found.',
+                teamA: 'Team A', teamB: 'Team B'
             }
         };
-
-        function updateLangUI() {
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (i18nDict[currentLang][key]) {
-                    el.textContent = i18nDict[currentLang][key];
-                }
-            });
-            document.getElementById('lang-btn').textContent = currentLang === 'de' ? 'EN' : 'DE';
+        function tr(key, vars) {
+            let s = (I18N[currentLang][key] ?? I18N.de[key] ?? key);
+            if (vars) Object.keys(vars).forEach(k => { s = s.replace(`{${k}}`, vars[k]); });
+            return s;
         }
-
-        function toggleLanguage() {
-            playCleanSound('click');
-            currentLang = currentLang === 'de' ? 'en' : 'de';
-            updateLangUI();
-            render();
-        }
-
-        function toggleTheme() {
-            playCleanSound('click');
-            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
-            localStorage.setItem('handball_theme', isDark ? 'light' : 'dark');
-        }
-
-        function playCleanSound(type) {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-
-            const t = audioCtx.currentTime;
-            if (type === 'click') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(600, t);
-                osc.frequency.exponentialRampToValueAtTime(300, t + 0.05);
-                gain.gain.setValueAtTime(0.1, t);
-                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
-                osc.start(t);
-                osc.stop(t + 0.05);
-            } else if (type === 'success') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(400, t);
-                osc.frequency.setValueAtTime(600, t + 0.1);
-                gain.gain.setValueAtTime(0.1, t);
-                gain.gain.linearRampToValueAtTime(0, t + 0.2);
-                osc.start(t);
-                osc.stop(t + 0.2);
-            } else if (type === 'delete' || type === 'error') {
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(200, t);
-                osc.frequency.setValueAtTime(150, t + 0.1);
-                gain.gain.setValueAtTime(0.1, t);
-                gain.gain.linearRampToValueAtTime(0, t + 0.2);
-                osc.start(t);
-                osc.stop(t + 0.2);
-            }
-        }
-
-        // Load from LocalStorage
-        function loadState() {
-            const saved = localStorage.getItem('handball_shots');
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    state = {
-                        shots: Array.isArray(parsed.shots) ? parsed.shots : [],
-                        gameNote: parsed.gameNote || '',
-                        filters: {
-                            showOnly: parsed.filters && parsed.filters.showOnly ? parsed.filters.showOnly : null,
-                            hiddenNumbers: Array.isArray(parsed.filters && parsed.filters.hiddenNumbers) ? parsed.filters.hiddenNumbers : []
-                        },
-                        settings: parsed.settings || { readOnly: false }
-                    };
-                } catch (e) {
-                    console.error("Error loading data", e);
-                }
-            }
-            const savedTheme = localStorage.getItem('handball_theme');
-            if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
-        }
-
-        // Save to LocalStorage
-        function persistState() {
-            localStorage.setItem('handball_shots', JSON.stringify(state));
-        }
-
-        async function fetchLibraryFiles() {
-            const status = document.getElementById('library-status');
-            status.textContent = 'Lade Dateiliste...';
-
-            const api = `https://api.github.com/repos/${GITHUB_LIBRARY.owner}/${GITHUB_LIBRARY.repo}/git/trees/${GITHUB_LIBRARY.branch}?recursive=1`;
-            try {
-                const response = await fetch(api);
-                if (!response.ok) {
-                    throw new Error(`GitHub API Fehler: ${response.status}`);
-                }
-                const data = await response.json();
-                libraryFiles = (data.tree || []).filter(item => item.type === 'blob' && item.path.endsWith('.json'))
-                    .map(item => ({ path: item.path, name: item.path.split('/').pop() }));
-
-                // Load shot counts for all files
-                libraryFileShotCounts = {};
-                status.textContent = 'Lade Spieldaten...';
-                for (const file of libraryFiles) {
-                    await fetchFileShotCount(file.path, file.name);
-                }
-
-                libraryLoaded = true;
-                renderLibraryList();
-                status.textContent = `${libraryFiles.length} Dateien gefunden.`;
-            } catch (err) {
-                libraryFiles = [];
-                libraryFileShotCounts = {};
-                status.textContent = 'Fehler beim Laden der Cloud-Library.';
-                showToast(err.message || 'Cloud-Library konnte nicht geladen werden.', 'error');
-            }
-        }
-
-        async function fetchFileShotCount(path, name) {
-            try {
-                const url = `https://raw.githubusercontent.com/${GITHUB_LIBRARY.owner}/${GITHUB_LIBRARY.repo}/${GITHUB_LIBRARY.branch}/${path}`;
-                const response = await fetch(url);
-                if (!response.ok) {
-                    console.warn(`Konnte Datei nicht laden: ${path} (${response.status})`);
-                    libraryFileShotCounts[name] = { count: 0, goal30: 'n/a', goal40: 'n/a', shots: [] };
-                    return;
-                }
-                const data = await response.json();
-                const shots = Array.isArray(data.shots) ? data.shots : [];
-                const count = shots.length;
-                const goal30 = count >= 30 ? shots[29].number : 'n/a';
-                const goal40 = count >= 40 ? shots[39].number : 'n/a';
-
-                libraryFileShotCounts[name] = {
-                    count: count,
-                    goal30: goal30,
-                    goal40: goal40,
-                    shots: shots
-                };
-                console.log(`Datei ${name}: ${count} Tore (30.: ${goal30}, 40.: ${goal40})`);
-            } catch (err) {
-                console.error(`Fehler beim Laden von ${name}:`, err);
-                libraryFileShotCounts[name] = { count: 0, goal30: 'n/a', goal40: 'n/a', shots: [] };
-            }
-        }
-
-        function getLibraryGroup(name) {
-            const matchDate = name.match(/(\d+-mai-\d{2})/i);
-            return matchDate ? matchDate[1].toLowerCase() : 'unbekannte gruppe';
-        }
-
-        function getLibraryHalf(name) {
-            const matchHalf = name.match(/halb(\d+)/i);
-            return matchHalf ? parseInt(matchHalf[1], 10) : 0;
-        }
-
-        function openLibrary() {
-            const modal = document.getElementById('library-modal');
-            modal.classList.add('active');
-            document.getElementById('library-search').value = '';
-            // Reset cache and always reload latest data
-            libraryFileShotCounts = {};
-            libraryLoaded = false;
-            fetchLibraryFiles();
-        }
-
-        function closeLibrary() {
-            const modal = document.getElementById('library-modal');
-            modal.classList.remove('active');
-        }
-
-        function renderLibraryList() {
-            const filter = document.getElementById('library-search').value.trim().toLowerCase();
-            const listContainer = document.getElementById('library-list');
-            listContainer.innerHTML = '';
-
-            const filtered = libraryFiles
-                .filter(file => file.name.toLowerCase().includes(filter))
-                .sort((a, b) => {
-                    const groupA = getLibraryGroup(a.name);
-                    const groupB = getLibraryGroup(b.name);
-                    if (groupA !== groupB) return groupA.localeCompare(groupB, 'de');
-                    return getLibraryHalf(a.name) - getLibraryHalf(b.name);
-                });
-
-            const groups = filtered.reduce((acc, file) => {
-                const group = getLibraryGroup(file.name);
-                if (!acc[group]) acc[group] = [];
-                acc[group].push(file);
-                return acc;
-            }, {});
-
-            if (filtered.length === 0) {
-                listContainer.innerHTML = '<div class="text-secondary" style="padding: 1rem; text-align:center;">Keine Dateien gefunden.</div>';
-                return;
-            }
-
-            Object.keys(groups).sort().forEach(groupName => {
-                const groupEl = document.createElement('div');
-                groupEl.className = 'library-group';
-                const title = document.createElement('h3');
-
-                // Calculate total goals for this group
-                const groupFiles = groups[groupName];
-                let totalGoals = 0;
-                let cumulativeShots = []; // All shots in sequence
-
-                // Sort files by half number and accumulate shots
-                groupFiles.sort((a, b) => getLibraryHalf(a.name) - getLibraryHalf(b.name)).forEach(file => {
-                    const fileData = libraryFileShotCounts[file.name];
-                    if (fileData && fileData.shots) {
-                        cumulativeShots.push(...fileData.shots);
-                        totalGoals += fileData.shots.length;
-                    }
-                });
-
-                // Find 30th and 40th goals from cumulative sequence
-                const goal30 = cumulativeShots.length >= 30 ? cumulativeShots[29].number : 'n/a';
-                const goal40 = cumulativeShots.length >= 40 ? cumulativeShots[39].number : 'n/a';
-
-                title.textContent = `Gruppe: ${groupName} | Gesamt: ${totalGoals} Tor${totalGoals !== 1 ? 'e' : ''}`;
-
-                // Add goal 30/40 info
-                const infoEl = document.createElement('p');
-                infoEl.style.fontSize = '0.85rem';
-                infoEl.style.color = 'var(--text-sec)';
-                infoEl.style.marginBottom = '0.75rem';
-                infoEl.textContent = `30. Tor: ${goal30} | 40. Tor: ${goal40}`;
-
-                groupEl.appendChild(title);
-                groupEl.appendChild(infoEl);
-
-                groupFiles.forEach(file => {
-                    const item = document.createElement('div');
-                    item.className = 'library-item';
-                    const halfNum = getLibraryHalf(file.name);
-                    const goalCount = libraryFileShotCounts[file.name]?.count || 0;
-
-                    const itemContent = document.createElement('div');
-                    itemContent.style.flex = '1';
-                    itemContent.style.cursor = 'pointer';
-                    itemContent.onclick = () => loadLibraryFile(file.path);
-                    itemContent.innerHTML = `
-                        <span class="item-name">${file.name}</span>
-                        <span class="item-meta">halb ${halfNum} • ${goalCount} Tor${goalCount !== 1 ? 'e' : ''}</span>
-                    `;
-                    item.appendChild(itemContent);
-
-                    const seqBtn = document.createElement('button');
-                    seqBtn.className = 'btn btn-small';
-                    seqBtn.textContent = 'Reihenfolge';
-                    seqBtn.style.marginLeft = '0.5rem';
-                    seqBtn.onclick = (e) => {
-                        e.stopPropagation();
-                        openShotSequence(file.name);
-                    };
-                    item.appendChild(seqBtn);
-
-                    groupEl.appendChild(item);
-                });
-                listContainer.appendChild(groupEl);
+        function applyLang() {
+            document.documentElement.lang = currentLang;
+            document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = tr(el.dataset.i18n); });
+            document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = tr(el.dataset.i18nPh); });
+            document.querySelectorAll('[data-i18n-title]').forEach(el => {
+                el.title = tr(el.dataset.i18nTitle);
+                el.setAttribute('aria-label', el.title);
             });
         }
 
-        async function loadLibraryFile(path) {
-            const status = document.getElementById('library-status');
-            status.textContent = `Lade ${path}...`;
-            const url = `https://raw.githubusercontent.com/${GITHUB_LIBRARY.owner}/${GITHUB_LIBRARY.repo}/${GITHUB_LIBRARY.branch}/${path}`;
-            try {
-                closeLibrary();
-                const overlay = document.getElementById('loading-overlay');
-                const text = document.getElementById('loading-text');
-                const fill = document.getElementById('progress-bar-fill');
-                
-                text.textContent = 'Downloading... 0%';
-                fill.style.width = '0%';
-                overlay.classList.add('active');
-                
-                // Fake 3 second loading with realistic stutter
-                await new Promise(resolve => {
-                    let progress = 0;
-                    const totalTime = 3000;
-                    const steps = 30;
-                    const interval = setInterval(() => {
-                        progress += (100 / steps) * (0.6 + Math.random() * 0.8);
-                        if (progress >= 100) {
-                            progress = 100;
-                            clearInterval(interval);
-                            setTimeout(resolve, 200);
-                        }
-                        text.textContent = `Downloading... ${Math.floor(progress)}%`;
-                        fill.style.width = `${progress}%`;
-                    }, totalTime / steps);
-                });
-
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`Datei konnte nicht geladen werden (${response.status})`);
-                }
-                const imported = await response.json();
-                state = {
-                    shots: Array.isArray(imported.shots) ? imported.shots : [],
-                    gameNote: imported.gameNote || '',
-                    filters: {
-                        showOnly: null,
-                        hiddenNumbers: []
-                    },
-                    settings: imported.settings || { readOnly: false }
-                };
-                persistState();
-                render();
-                
-                overlay.classList.remove('active');
-                showToast(`Cloud-Spiel ${path} geladen.`, 'success');
-                status.textContent = `Cloud-Datei ${path} geladen.`;
-            } catch (err) {
-                document.getElementById('loading-overlay').classList.remove('active');
-                status.textContent = 'Fehler beim Laden der Datei.';
-                showToast(err.message || 'Datei konnte nicht importiert werden.', 'error');
-            }
-        }
-
-        function openShotSequence(fileName) {
-            const data = libraryFileShotCounts[fileName];
-            if (!data || !data.shots || data.shots.length === 0) {
-                showToast('Keine Schüsse für diese Datei gefunden.', 'warning');
-                return;
-            }
-
-            const modal = document.getElementById('sequence-modal');
-            const seqList = document.getElementById('sequence-list');
-            const seqTitle = document.getElementById('sequence-title');
-            seqTitle.textContent = `Torfolge: ${fileName}`;
-            seqList.innerHTML = '';
-
-            data.shots.forEach((shot, index) => {
-                const item = document.createElement('div');
-                item.style.padding = '0.75rem';
-                item.style.borderBottom = '1px solid #f2f2f7';
-                item.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-weight: 600;">Tor ${index + 1}</span>
-                        <span style="color: var(--accent-color); font-weight: 600;">Nummer ${shot.number}</span>
-                        <span style="font-size: 0.9rem; color: var(--text-sec);">${shot.time || 'Uhrzeit n/a'}</span>
-                    </div>
-                `;
-                seqList.appendChild(item);
-            });
-
-            modal.classList.add('active');
-        }
-
-        function closeSequence() {
-            const modal = document.getElementById('sequence-modal');
-            modal.classList.remove('active');
-        }
-
-        /**
-         * Rendering function: Synchronizes UI with state completely
-         */
-        function render() {
-            // Apply ReadOnly UI logic
-            const ro = state.settings?.readOnly;
-            document.getElementById('readonly-banner').style.display = ro ? 'block' : 'none';
-            document.getElementById('game-note').readOnly = !!ro;
-            document.getElementById('note-toolbar').style.display = ro ? 'none' : 'flex';
-
-            // Update counter with animation
-            const counterElement = document.getElementById('total-shots');
-            const newCount = state.shots.length;
-            if (counterElement.innerText !== newCount.toString()) {
-                counterElement.style.animation = 'none';
-                setTimeout(() => {
-                    counterElement.innerText = newCount;
-                    counterElement.style.animation = 'slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
-                }, 10);
-            }
-
-            // Render markers with filters
-            const goalFrame = document.getElementById('goal-frame');
-            goalFrame.innerHTML = ''; // Clear existing
-            const { showOnly, hiddenNumbers } = state.filters;
-
-            state.shots.forEach((shot, index) => {
-                const shouldHide = (showOnly && shot.number !== showOnly) || hiddenNumbers.includes(shot.number);
-                if (shouldHide) return;
-
-                const marker = document.createElement('div');
-                marker.className = `marker ${shot.outcome ? 'outcome-' + shot.outcome : 'outcome-goal'}`;
-                marker.style.left = shot.x + '%';
-                marker.style.top = shot.y + '%';
-                marker.innerText = shot.number;
-                marker.style.animationDelay = (index * 50) + 'ms';
-                marker.addEventListener('dblclick', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (!state.settings?.readOnly) {
-                        openDeleteModal(index, shot.number);
-                    }
-                });
-                goalFrame.appendChild(marker);
-            });
-
-            // Render game note
-            const noteField = document.getElementById('game-note');
-            if (noteField) {
-                noteField.value = state.gameNote;
-            }
-
-            // Calculate and render ranking
-            const rankingList = document.getElementById('ranking-list');
-            rankingList.innerHTML = ''; // Clear existing
-
-            const counts = {};
-            state.shots.forEach(shot => {
-                counts[shot.number] = (counts[shot.number] || 0) + 1;
-            });
-
-            // Sort descending
-            const sortedNumbers = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
-
-            if (sortedNumbers.length === 0) {
-                rankingList.innerHTML = '<li class="text-secondary" style="text-align: center; padding: 1rem 0; animation: slideDownIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">Keine Daten vorhanden</li>';
-            } else {
-                sortedNumbers.forEach((num, index) => {
-                    const isHidden = state.filters.hiddenNumbers.includes(num);
-                    const li = document.createElement('li');
-                    li.className = 'ranking-item';
-                    li.style.animationDelay = (index * 50) + 'ms';
-
-                    li.innerHTML = `
-                        <div class="player-info">
-                            <div class="jersey-badge">${num}</div>
-                            <span>Spieler ${num}</span>
-                        </div>
-                        <div class="ranking-actions">
-                            <span class="shot-count">${counts[num]} Wurf${counts[num] > 1 ? 'e' : ''}</span>
-                            <div class="action-group">
-                                <button class="btn btn-small" onclick="showOnlyNumber('${num}')">Nur diese anzeigen</button>
-                                <button class="btn btn-small btn-hide" onclick="toggleHiddenNumber('${num}')">${isHidden ? 'Anzeigen' : 'Verbergen'}</button>
-                            </div>
-                        </div>
-                    `;
-                    rankingList.appendChild(li);
-                });
-            }
-        }
-
-        /**
-         * Security / Gatekeeper
-         */
-        const CORRECT_PIN = "7521";
-        const pinInput = document.getElementById('pin-input');
-        const loginScreen = document.getElementById('login-screen');
-        const dashboard = document.getElementById('dashboard');
-
-        function focusPin() {
-            pinInput.focus();
-        }
-
-        // Auto-focus on load
-        window.addEventListener('load', () => {
-            focusPin();
-            loadState(); // Initial load
-        });
-
-        /**
-         * Toast Notification System
-         */
-        function showToast(message, type = 'info', duration = 3000) {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.textContent = message;
-
-            container.appendChild(toast);
-            container.style.pointerEvents = 'all';
-
-            // Auto remove
-            setTimeout(() => {
-                toast.classList.add('exit');
-                setTimeout(() => {
-                    toast.remove();
-                    if (container.children.length === 0) {
-                        container.style.pointerEvents = 'none';
-                    }
-                }, 400);
-            }, duration);
-        }
-
-        /**
-         * Activation Animation - Simple Haptic Feedback
-         */
-        function triggerActivationAnimation() {
-            // Haptic Feedback only
-            if (navigator.vibrate) {
-                navigator.vibrate([30, 50, 30]);
-            }
-        }
-
-        // Trigger on window focus (tab comes to foreground)
-        window.addEventListener('focus', () => {
-            if (dashboard.classList.contains('active')) {
-                triggerActivationAnimation();
-            }
-        });
-
-        // Trigger when tab becomes visible after being hidden
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden && dashboard.classList.contains('active')) {
-                triggerActivationAnimation();
-            }
-        });
-
-        pinInput.addEventListener('input', (e) => {
-            if (e.target.value === CORRECT_PIN) {
-                loginScreen.style.display = 'none';
-                dashboard.classList.add('active');
-                pinInput.blur();
-                render(); // Render data when unlocked
-                triggerActivationAnimation(); // Trigger animation on unlock
-            }
-        });
-
-        /**
-         * Interaction / Mapping
-         */
-        const goalFrame = document.getElementById('goal-frame');
-        const modal = document.getElementById('number-modal');
-        const jerseyInput = document.getElementById('jersey-input');
-
-        goalFrame.addEventListener('click', (e) => {
-            if (state.settings?.readOnly) return;
-            if (e.target !== goalFrame) return;
-            playCleanSound('click');
-            const rect = goalFrame.getBoundingClientRect();
-            // Calculate relative percentages
-            const x = ((e.clientX - rect.left) / rect.width) * 100;
-            const y = ((e.clientY - rect.top) / rect.height) * 100;
-
-            tempShot = { x, y };
-            openModal();
-        });
-
-        function openModal() {
-            modal.classList.add('active');
-            jerseyInput.value = '';
-            // Delay focus slightly to ensure modal is visible (especially on iOS)
-            setTimeout(() => jerseyInput.focus(), 100);
-        }
-
-        function closeModal() {
-            modal.classList.remove('active');
-            tempShot = null;
-            jerseyInput.blur();
-        }
-
-        function saveShot() {
-            const num = jerseyInput.value.trim();
-            if (!num) return; // Prevent empty
-
-            const outcomeEl = document.querySelector('input[name="shot-outcome"]:checked');
-            const outcome = outcomeEl ? outcomeEl.value : 'goal';
-
-            if (tempShot) {
-                state.shots.push({
-                    x: tempShot.x.toFixed(2), // Keep 2 decimals
-                    y: tempShot.y.toFixed(2),
-                    number: num,
-                    outcome: outcome,
-                    timestamp: Date.now(), // Current time in milliseconds
-                    time: new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) // HH:MM:SS
-                });
-                persistState();
-                render();
-                playCleanSound('success');
-            }
-            closeModal();
-        }
-
-        function openDeleteModal(index, number) {
-            pendingDeleteIndex = index;
-            const deleteModal = document.getElementById('delete-modal');
-            const deleteInput = document.getElementById('delete-confirm-input');
-            deleteInput.value = '';
-            deleteInput.placeholder = `Nummer ${number} eingeben`;
-            deleteModal.classList.add('active');
-            setTimeout(() => deleteInput.focus(), 100);
-        }
-
-        function closeDeleteModal() {
-            pendingDeleteIndex = null;
-            const deleteModal = document.getElementById('delete-modal');
-            deleteModal.classList.remove('active');
-            document.getElementById('delete-confirm-input').blur();
-        }
-
-        function confirmRemoveShot() {
-            const deleteInput = document.getElementById('delete-confirm-input');
-            const enteredNumber = deleteInput.value.trim();
-
-            if (pendingDeleteIndex === null || enteredNumber === '') {
-                showToast('Bitte die Nummer bestätigen.', 'warning');
-                return;
-            }
-
-            const shot = state.shots[pendingDeleteIndex];
-            if (!shot) {
-                closeDeleteModal();
-                return;
-            }
-
-            if (enteredNumber !== shot.number) {
-                showToast('Nummer stimmt nicht überein.', 'error');
-                return;
-            }
-
-            state.shots.splice(pendingDeleteIndex, 1);
-            pendingDeleteIndex = null;
-            persistState();
-            render();
-            closeDeleteModal();
-            showToast(`Marker für Nummer ${enteredNumber} gelöscht.`, 'success');
-        }
-
-        function saveGameNote() {
-            const noteField = document.getElementById('game-note');
-            state.gameNote = noteField.value.trim();
-            persistState();
-            showToast('Spielnotiz gespeichert.', 'success');
-        }
-
-        function showOnlyNumber(number) {
-            state.filters.showOnly = number;
-            state.filters.hiddenNumbers = [];
-            persistState();
-            render();
-            showToast(`Nur Nummer ${number} wird angezeigt.`, 'info');
-        }
-
-        function toggleHiddenNumber(number) {
-            const hidden = state.filters.hiddenNumbers;
-            if (hidden.includes(number)) {
-                state.filters.hiddenNumbers = hidden.filter(n => n !== number);
-                showToast(`Nummer ${number} wird wieder angezeigt.`, 'success');
-            } else {
-                state.filters.hiddenNumbers = [...hidden, number];
-                showToast(`Nummer ${number} ausgeblendet.`, 'info');
-            }
-            state.filters.showOnly = null;
-            persistState();
-            render();
-        }
-
-        function resetFilters() {
-            state.filters.showOnly = null;
-            state.filters.hiddenNumbers = [];
-            persistState();
-            render();
-            showToast('Filter zurückgesetzt.', 'success');
-        }
-
-        // Enter key handling in modal
-        jerseyInput.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                saveShot();
-            }
-        });
-
-        document.getElementById('delete-confirm-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                confirmRemoveShot();
-            }
-        });
-
-        document.getElementById('reset-confirm-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                executeHardReset();
-            }
-        });
-
-        function insertNoteFormat(startStr, endStr) {
-            if (state.settings?.readOnly) return;
-            playCleanSound('click');
-            const noteField = document.getElementById('game-note');
-            const start = noteField.selectionStart;
-            const end = noteField.selectionEnd;
-            const text = noteField.value;
-            const before = text.substring(0, start);
-            const selection = text.substring(start, end);
-            const after = text.substring(end);
-
-            noteField.value = before + startStr + selection + endStr + after;
-            noteField.focus();
-            noteField.selectionStart = start + startStr.length;
-            noteField.selectionEnd = start + startStr.length + selection.length;
-        }
-
-        /**
-         * Data Management (Export/Import/Reset)
-         */
-        function exportData() {
-            if (state.shots.length === 0) {
-                showToast('Keine Daten zum Exportieren vorhanden.', 'warning');
-                return;
-            }
-            playCleanSound('success');
-            const isReadonly = document.getElementById('export-readonly').checked;
-            const exportState = { ...state, settings: { readOnly: isReadonly } };
-
-            const dataStr = JSON.stringify(exportState, null, 2);
-            const blob = new Blob([dataStr], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `handball_scout_${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            showToast('Daten erfolgreich exportiert.', 'success');
-        }
-
-        function importData(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                try {
-                    const imported = JSON.parse(e.target.result);
-                    if (imported && Array.isArray(imported.shots)) {
-                        state = {
-                            shots: imported.shots,
-                            gameNote: imported.gameNote || '',
-                            filters: {
-                                showOnly: imported.filters && imported.filters.showOnly ? imported.filters.showOnly : null,
-                                hiddenNumbers: Array.isArray(imported.filters && imported.filters.hiddenNumbers) ? imported.filters.hiddenNumbers : []
-                            },
-                            settings: imported.settings || { readOnly: false }
-                        };
-                        persistState();
-                        render();
-                        playCleanSound('success');
-                        showToast('Daten erfolgreich importiert.', 'success');
-                    } else {
-                        playCleanSound('error');
-                        showToast('Ungültiges Dateiformat.', 'error');
-                    }
-                } catch (err) {
-                    playCleanSound('error');
-                    showToast('Fehler beim Lesen der Datei.', 'error');
-                }
-                // Reset input
-                event.target.value = '';
-            };
-            reader.readAsText(file);
-        }
-
-        function hardReset() {
-            const resetModal = document.getElementById('reset-modal');
-            const resetInput = document.getElementById('reset-confirm-input');
-            resetInput.value = '';
-            resetModal.classList.add('active');
-            setTimeout(() => resetInput.focus(), 100);
-        }
-
-        function closeResetModal() {
-            document.getElementById('reset-modal').classList.remove('active');
-        }
-
-        function executeHardReset() {
-            const input = document.getElementById('reset-confirm-input').value;
-            if (input !== 'CONFIRM') {
-                showToast('Bitte "CONFIRM" exakt eingeben.', 'error');
-                playCleanSound('error');
-                return;
-            }
-            
-            closeResetModal();
-            playCleanSound('delete');
-            
-            // Clear all data completely
-            state = {
-                shots: [],
+        /* =========================================================
+           State (altes Speichersystem: localStorage + JSON-Export)
+           ========================================================= */
+        function defaultState() {
+            return {
+                shots: [],   // { x, y, number, team:'a'|'b', outcome:'goal'|'saved', timestamp, time, origin?:{x,y}, ctrl?:{x,y} }
                 gameNote: '',
-                filters: {
-                    showOnly: null,
-                    hiddenNumbers: []
-                },
+                teams: { a: { name: 'Team A' }, b: { name: 'Team B' } },
+                meta: { date: todayISO(), half: 1 },
+                filters: { showOnly: null, hiddenNumbers: [], hiddenTeams: [] },
                 settings: { readOnly: false }
             };
-
-            // Clear localStorage completely
-            localStorage.removeItem('handball_shots');
-            localStorage.clear();
-
-            // Clear sessionStorage
-            sessionStorage.clear();
-
-            // Update UI
-            render();
-
-            // Show confirmation
-            showToast('Alle Spielerdaten wurden gelöscht.', 'success');
-
-            // Optional: Reload page to ensure clean state
-            setTimeout(() => {
-                location.reload();
-            }, 1500);
         }
+
+        /** Alte Dateien (ohne team/meta) werden automatisch als Team A geladen. */
+        function normalizeState(p) {
+            const d = defaultState();
+            if (!p || typeof p !== 'object') return d;
+            const validPt = o => o && isFinite(parseFloat(o.x)) && isFinite(parseFloat(o.y));
+            d.shots = (Array.isArray(p.shots) ? p.shots : []).map(s => {
+                const out = { ...s, team: s.team === 'b' ? 'b' : 'a', outcome: s.outcome === 'saved' ? 'saved' : 'goal', number: String(s.number) };
+                if (!validPt(s.origin)) { delete out.origin; delete out.ctrl; }
+                else if (!validPt(s.ctrl)) delete out.ctrl;
+                return out;
+            });
+            d.gameNote = p.gameNote || '';
+            if (p.teams) ['a', 'b'].forEach(k => { if (p.teams[k] && p.teams[k].name) d.teams[k].name = String(p.teams[k].name); });
+            if (p.meta) {
+                if (/^\d{4}-\d{2}-\d{2}$/.test(p.meta.date || '')) d.meta.date = p.meta.date;
+                const h = parseInt(p.meta.half, 10);
+                if (h >= 1 && h <= 4) d.meta.half = h;
+            }
+            d.settings = { readOnly: !!(p.settings && p.settings.readOnly) };
+            return d;
+        }
+
+        let state = defaultState();
+        let activeTeam = 'a';
+        let highlightIdx = null;
+        let lastAddedIdx = null;
+        let noteDirty = false;
+        let exportReadonly = false;
+
+        function loadState() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    state = normalizeState(parsed);
+                    const f = parsed.filters || {};
+                    const okKey = k => typeof k === 'string' && k.includes(':');
+                    state.filters.showOnly = okKey(f.showOnly) ? f.showOnly : null;
+                    state.filters.hiddenNumbers = Array.isArray(f.hiddenNumbers) ? f.hiddenNumbers.filter(okKey) : [];
+                    state.filters.hiddenTeams = Array.isArray(f.hiddenTeams) ? f.hiddenTeams.filter(t => t === 'a' || t === 'b') : [];
+                    if (!parsed.meta) state.meta.date = todayISO();
+                }
+            } catch (e) { console.error('Fehler beim Laden', e); }
+            const theme = localStorage.getItem('handball_theme') ||
+                (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+            const lang = localStorage.getItem('handball_lang');
+            if (lang === 'en' || lang === 'de') currentLang = lang;
+        }
+        function persistState() {
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { console.error(e); }
+        }
+
+        /* =========================================================
+           Sound & Toast
+           ========================================================= */
+        let audioCtx = null;
+        function sound(type) {
+            try {
+                audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+                o.connect(g); g.connect(audioCtx.destination);
+                const t = audioCtx.currentTime;
+                if (type === 'click') {
+                    o.type = 'sine'; o.frequency.setValueAtTime(600, t); o.frequency.exponentialRampToValueAtTime(300, t + .05);
+                    g.gain.setValueAtTime(.08, t); g.gain.exponentialRampToValueAtTime(.001, t + .05); o.start(t); o.stop(t + .05);
+                } else if (type === 'success') {
+                    o.type = 'sine'; o.frequency.setValueAtTime(400, t); o.frequency.setValueAtTime(600, t + .1);
+                    g.gain.setValueAtTime(.08, t); g.gain.linearRampToValueAtTime(0, t + .2); o.start(t); o.stop(t + .2);
+                } else {
+                    o.type = 'triangle'; o.frequency.setValueAtTime(200, t); o.frequency.setValueAtTime(150, t + .1);
+                    g.gain.setValueAtTime(.08, t); g.gain.linearRampToValueAtTime(0, t + .2); o.start(t); o.stop(t + .2);
+                }
+            } catch (e) { /* Audio optional */ }
+        }
+        function toast(msg, type = 'info', ms = 2800) {
+            const el = document.createElement('div');
+            el.className = `toast ${type}`;
+            el.textContent = msg;
+            $('toast-container').appendChild(el);
+            setTimeout(() => el.remove(), ms);
+        }
+
+        /* =========================================================
+           Spielfeld (Draufsicht) – gemeinsame Zeichenfunktionen
+           Koordinaten: 1 Einheit = 10 cm, Tor oben mittig (x 85–115)
+           ========================================================= */
+        const COURT = `
+            <rect class="floor" x="0" y="-8" width="200" height="138"/>
+            <path class="ln" d="M25 0A60 60 0 0 0 85 60H115A60 60 0 0 0 175 0"/>
+            <path class="ln dash" d="M-5 0A90 90 0 0 0 85 90H115A90 90 0 0 0 205 0"/>
+            <line class="ln" x1="0" y1="0" x2="200" y2="0"/>
+            <line class="ln" x1="95" y1="70" x2="105" y2="70"/>
+            <line class="ln" x1="98" y1="40" x2="102" y2="40"/>
+            <rect class="goalbox" x="85" y="-6" width="30" height="6"/>`;
+
+        const endX = gx => 85 + Math.min(100, Math.max(0, parseFloat(gx))) / 100 * 30;
+        const num1 = v => Math.round(parseFloat(v) * 10) / 10;
+
+        function curveD(s) {
+            const ex = endX(s.x), o = s.origin;
+            const ox = parseFloat(o.x), oy = parseFloat(o.y);
+            const c = s.ctrl || { x: (ox + ex) / 2, y: oy / 2 };
+            return `M${ox} ${oy}Q${parseFloat(c.x)} ${parseFloat(c.y)} ${ex} 0`;
+        }
+        function svgPoint(svg, e) {
+            const pt = svg.createSVGPoint();
+            pt.x = e.clientX; pt.y = e.clientY;
+            const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+            return { x: p.x, y: p.y };
+        }
+
+        /* =========================================================
+           Rendering
+           ========================================================= */
+        const shotKey = s => `${s.team}:${s.number}`;
+        function isVisible(s) {
+            const f = state.filters, k = shotKey(s);
+            if (f.hiddenTeams.includes(s.team)) return false;
+            if (f.showOnly && f.showOnly !== k) return false;
+            if (f.hiddenNumbers.includes(k)) return false;
+            return true;
+        }
+
+        function buildTeamCards() {
+            $('teams').innerHTML = ['a', 'b'].map(t => `
+                <div class="team-card t-${t}" data-team="${t}" tabindex="0">
+                    <div class="team-head">
+                        <input class="team-name" data-team-name="${t}" maxlength="22" autocomplete="off">
+                        <button class="icon-btn sm" data-act="team-vis" data-team="${t}" data-i18n-title="tTeamVis"></button>
+                    </div>
+                    <div class="team-stats">
+                        <span data-i18n-title="goal">${icon('ball')}<b data-cnt="goal-${t}">0</b></span>
+                        <span data-i18n-title="saved">${icon('shield')}<b data-cnt="saved-${t}">0</b></span>
+                    </div>
+                </div>`).join('');
+        }
+
+        function renderTeams() {
+            ['a', 'b'].forEach(t => {
+                const card = document.querySelector(`.team-card[data-team="${t}"]`);
+                card.classList.toggle('active', activeTeam === t);
+                const hidden = state.filters.hiddenTeams.includes(t);
+                card.classList.toggle('hidden-team', hidden);
+                const input = card.querySelector('.team-name');
+                if (document.activeElement !== input) input.value = state.teams[t].name;
+                input.readOnly = !!state.settings.readOnly;
+                const btn = card.querySelector('[data-act="team-vis"]');
+                btn.innerHTML = icon(hidden ? 'eye-off' : 'eye');
+                btn.title = tr('tTeamVis');
+                card.querySelector(`[data-cnt="goal-${t}"]`).textContent = state.shots.filter(s => s.team === t && s.outcome !== 'saved').length;
+                card.querySelector(`[data-cnt="saved-${t}"]`).textContent = state.shots.filter(s => s.team === t && s.outcome === 'saved').length;
+            });
+        }
+
+        function renderGoal() {
+            const frame = $('goal-frame');
+            frame.innerHTML = '';
+            state.shots.forEach((s, idx) => {
+                if (!isVisible(s)) return;
+                const m = document.createElement('div');
+                m.className = `marker t-${s.team} ${s.outcome === 'saved' ? 'saved' : ''}` +
+                    (idx === highlightIdx ? ' sel' : '') + (idx === lastAddedIdx ? ' pop' : '');
+                m.style.left = parseFloat(s.x) + '%';
+                m.style.top = parseFloat(s.y) + '%';
+                m.textContent = s.number;
+                m.dataset.idx = idx;
+                frame.appendChild(m);
+            });
+            lastAddedIdx = null;
+        }
+
+        function renderCourt() {
+            let h = COURT;
+            const items = [];
+            state.shots.forEach((s, idx) => { if (s.origin && isVisible(s)) items.push([s, idx]); });
+            items.sort((a, b) => (a[1] === highlightIdx) - (b[1] === highlightIdx)); // markierte Kurve oben
+            items.forEach(([s, idx]) => {
+                const cls = `curve t-${s.team} ${s.outcome === 'saved' ? 'saved' : ''} ` +
+                    (highlightIdx === null ? '' : (idx === highlightIdx ? 'hl' : 'dim'));
+                h += `<g class="t-${s.team}"><path class="${cls}" d="${curveD(s)}"/>` +
+                    `<circle class="origin" cx="${parseFloat(s.origin.x)}" cy="${parseFloat(s.origin.y)}" r="${idx === highlightIdx ? 3 : 2.2}"/>` +
+                    `<circle class="endpt" cx="${endX(s.x)}" cy="0" r="1.6"/></g>`;
+            });
+            $('court').innerHTML = h;
+        }
+
+        function renderRanking() {
+            let html = '';
+            ['a', 'b'].forEach(t => {
+                const map = {};
+                state.shots.filter(s => s.team === t).forEach(s => {
+                    const m = map[s.number] || (map[s.number] = { g: 0, p: 0 });
+                    s.outcome === 'saved' ? m.p++ : m.g++;
+                });
+                const nums = Object.keys(map).sort((x, y) => (map[y].g + map[y].p) - (map[x].g + map[x].p) || Number(x) - Number(y));
+                html += `<div class="rank-team t-${t}"><h3><span class="dot"></span>${esc(state.teams[t].name)}</h3>`;
+                if (!nums.length) html += `<p class="empty">${tr('noData')}</p>`;
+                nums.forEach(n => {
+                    const k = `${t}:${n}`;
+                    const hidden = state.filters.hiddenNumbers.includes(k);
+                    const solo = state.filters.showOnly === k;
+                    html += `<div class="rank-row">
+                        <span class="badge">${esc(n)}</span>
+                        <div class="rank-stats"><span title="${tr('goal')}">${icon('ball')}${map[n].g}</span><span title="${tr('saved')}">${icon('shield')}${map[n].p}</span></div>
+                        <div class="rank-actions">
+                            <button class="icon-btn sm ${solo ? 'on' : ''}" data-act="solo" data-k="${esc(k)}" title="${tr('tSolo')}">${icon('crosshair')}</button>
+                            <button class="icon-btn sm" data-act="hide" data-k="${esc(k)}" title="${tr('tHide')}">${icon(hidden ? 'eye-off' : 'eye')}</button>
+                        </div>
+                    </div>`;
+                });
+                html += '</div>';
+            });
+            $('ranking').innerHTML = html;
+        }
+
+        function render() {
+            const ro = !!state.settings.readOnly;
+            $('readonly-banner').style.display = ro ? 'flex' : 'none';
+            $('game-note').readOnly = ro;
+            $('note-toolbar').style.display = ro ? 'none' : 'flex';
+            $('btn-save-note').style.display = ro ? 'none' : '';
+            $('meta-date').value = state.meta.date;
+            $('meta-date').disabled = ro;
+            document.querySelectorAll('#meta-half button').forEach(b => b.classList.toggle('on', Number(b.dataset.half) === state.meta.half));
+            $('file-chip').textContent = buildFileName();
+            $('btn-ro').classList.toggle('on', exportReadonly);
+            if (!noteDirty) $('game-note').value = state.gameNote;
+            renderTeams();
+            renderGoal();
+            renderCourt();
+            renderRanking();
+        }
+
+        /* =========================================================
+           Modals
+           ========================================================= */
+        const openM = id => $(id).classList.add('open');
+        const closeM = id => $(id).classList.remove('open');
+
+        /* ---------- Wurf erfassen ---------- */
+        let tempShot = null, pickTeam = 'a', pickOutcome = 'goal', pickOrigin = null, pickCtrl = null, dragHandle = false;
+        const pick = $('pick-court');
+
+        function renderPickTeams() {
+            $('pick-team').innerHTML = ['a', 'b'].map(t =>
+                `<button class="t-${t} ${pickTeam === t ? 'on' : ''}" data-t="${t}"><span class="dot"></span>${esc(state.teams[t].name)}</button>`).join('');
+        }
+        function pickMid() {
+            const ex = endX(tempShot.x);
+            return { x: .25 * pickOrigin.x + .5 * pickCtrl.x + .25 * ex, y: .25 * pickOrigin.y + .5 * pickCtrl.y };
+        }
+        function renderPick() {
+            if (!tempShot) return;
+            const ex = endX(tempShot.x);
+            let h = COURT + `<g class="t-${pickTeam}"><circle class="goal-target" cx="${ex}" cy="0" r="3.2"/>`;
+            if (pickOrigin) {
+                const m = pickMid();
+                h += `<path class="curve ${pickOutcome === 'saved' ? 'saved' : ''}" d="M${pickOrigin.x} ${pickOrigin.y}Q${pickCtrl.x} ${pickCtrl.y} ${ex} 0"/>` +
+                    `<circle class="origin" cx="${pickOrigin.x}" cy="${pickOrigin.y}" r="2.6"/>` +
+                    `<circle class="handle" cx="${m.x}" cy="${m.y}" r="4.6"/>`;
+            }
+            pick.innerHTML = h + '</g>';
+        }
+
+        pick.addEventListener('pointerdown', e => {
+            if (!tempShot) return;
+            const p = svgPoint(pick, e);
+            if (pickOrigin) {
+                const m = pickMid();
+                if (Math.hypot(p.x - m.x, p.y - m.y) < 10) {
+                    dragHandle = true;
+                    pick.setPointerCapture(e.pointerId);
+                    return;
+                }
+            }
+            const ex = endX(tempShot.x);
+            pickOrigin = { x: num1(Math.min(198, Math.max(2, p.x))), y: num1(Math.min(128, Math.max(4, p.y))) };
+            pickCtrl = { x: (pickOrigin.x + ex) / 2, y: pickOrigin.y / 2 };
+            renderPick();
+            sound('click');
+        });
+        pick.addEventListener('pointermove', e => {
+            if (!dragHandle) return;
+            const p = svgPoint(pick, e), ex = endX(tempShot.x);
+            // Handle liegt bei t=0.5, daraus folgt der Kontrollpunkt
+            pickCtrl = {
+                x: num1(2 * Math.min(198, Math.max(2, p.x)) - .5 * (pickOrigin.x + ex)),
+                y: num1(2 * Math.min(128, Math.max(-6, p.y)) - .5 * pickOrigin.y)
+            };
+            renderPick();
+        });
+        ['pointerup', 'pointercancel'].forEach(ev => pick.addEventListener(ev, () => { dragHandle = false; }));
+
+        $('pick-team').addEventListener('click', e => {
+            const b = e.target.closest('button'); if (!b) return;
+            pickTeam = b.dataset.t; renderPickTeams(); renderPick();
+        });
+        $('pick-outcome').addEventListener('click', e => {
+            const b = e.target.closest('button'); if (!b) return;
+            pickOutcome = b.dataset.o;
+            document.querySelectorAll('#pick-outcome button').forEach(x => x.classList.toggle('on', x === b));
+            renderPick();
+        });
+        $('btn-clear-origin').addEventListener('click', () => { pickOrigin = null; pickCtrl = null; renderPick(); });
+
+        function openShotModal(x, y) {
+            tempShot = { x, y };
+            pickTeam = activeTeam; pickOutcome = 'goal'; pickOrigin = null; pickCtrl = null;
+            document.querySelectorAll('#pick-outcome button').forEach(b => b.classList.toggle('on', b.dataset.o === 'goal'));
+            renderPickTeams(); renderPick();
+            $('jersey-input').value = '';
+            openM('number-modal');
+            setTimeout(() => $('jersey-input').focus(), 120);
+        }
+        function closeShotModal() { closeM('number-modal'); tempShot = null; $('jersey-input').blur(); }
+
+        function saveShot() {
+            const num = $('jersey-input').value.trim();
+            if (!num) { toast(tr('toastNeedNum'), 'error'); sound('error'); return; }
+            if (!tempShot) return;
+            const shot = {
+                x: tempShot.x.toFixed(2), y: tempShot.y.toFixed(2),
+                number: num, team: pickTeam, outcome: pickOutcome,
+                timestamp: Date.now(),
+                time: new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+            };
+            if (pickOrigin) { shot.origin = { x: pickOrigin.x, y: pickOrigin.y }; shot.ctrl = { x: pickCtrl.x, y: pickCtrl.y }; }
+            state.shots.push(shot);
+            activeTeam = pickTeam;
+            lastAddedIdx = highlightIdx = state.shots.length - 1;
+            persistState(); render(); sound('success');
+            closeShotModal();
+        }
+        $('btn-save-shot').addEventListener('click', saveShot);
+        $('btn-cancel-shot').addEventListener('click', closeShotModal);
+        function setPickTeam(t) { pickTeam = t; renderPickTeams(); renderPick(); }
+        function setPickOutcome(o) {
+            pickOutcome = o;
+            document.querySelectorAll('#pick-outcome button').forEach(x => x.classList.toggle('on', x.dataset.o === o));
+            renderPick();
+        }
+        $('jersey-input').addEventListener('keydown', e => {
+            if (e.key === 'Enter') { saveShot(); return; }
+            if (e.ctrlKey || e.metaKey || e.altKey) return;
+            const k = e.key.toLowerCase();
+            const map = { a: () => setPickTeam('a'), b: () => setPickTeam('b'), t: () => setPickOutcome('goal'), h: () => setPickOutcome('saved') };
+            if (map[k]) { e.preventDefault(); map[k](); sound('click'); }
+        });
+        document.addEventListener('keydown', e => {
+            if (e.key !== 'Escape') return;
+            const open = [...document.querySelectorAll('.modal.open')].pop();
+            if (!open) return;
+            if (open.id === 'number-modal') closeShotModal();
+            else if (open.id === 'delete-modal') closeDeleteModal();
+            else closeM(open.id);
+        });
+
+        /* ---------- Tor-Fläche ---------- */
+        const goalFrame = $('goal-frame');
+        goalFrame.addEventListener('click', e => {
+            if (state.settings.readOnly) return;
+            const marker = e.target.closest('.marker');
+            if (marker) {
+                const idx = Number(marker.dataset.idx);
+                const now = Date.now();
+                if (marker._last && now - marker._last < 400) {   // Doppeltipp
+                    marker._last = 0;
+                    openDeleteModal(idx);
+                } else {
+                    marker._last = now;
+                    highlightIdx = (highlightIdx === idx) ? null : idx;
+                    goalFrame.querySelectorAll('.marker').forEach(m => m.classList.toggle('sel', Number(m.dataset.idx) === highlightIdx));
+                    renderCourt();
+                }
+                return;
+            }
+            sound('click');
+            const r = goalFrame.getBoundingClientRect();
+            openShotModal(((e.clientX - r.left) / r.width) * 100, ((e.clientY - r.top) / r.height) * 100);
+        });
+        // Auch im Read-only-Modus Kurven markieren
+        goalFrame.addEventListener('click', e => {
+            if (!state.settings.readOnly) return;
+            const marker = e.target.closest('.marker'); if (!marker) return;
+            const idx = Number(marker.dataset.idx);
+            highlightIdx = (highlightIdx === idx) ? null : idx;
+            goalFrame.querySelectorAll('.marker').forEach(m => m.classList.toggle('sel', Number(m.dataset.idx) === highlightIdx));
+            renderCourt();
+        });
+
+        /* ---------- Löschen ---------- */
+        let pendingDelete = null;
+        function openDeleteModal(idx) {
+            const s = state.shots[idx]; if (!s) return;
+            pendingDelete = idx;
+            $('delete-sub').textContent = tr('delSub', { n: s.number, team: state.teams[s.team].name });
+            $('delete-confirm-input').value = '';
+            openM('delete-modal');
+            setTimeout(() => $('delete-confirm-input').focus(), 120);
+        }
+        function closeDeleteModal() { pendingDelete = null; closeM('delete-modal'); $('delete-confirm-input').blur(); }
+        function confirmDelete() {
+            const s = state.shots[pendingDelete];
+            if (!s) { closeDeleteModal(); return; }
+            if ($('delete-confirm-input').value.trim() !== s.number) { toast(tr('toastMismatch'), 'error'); sound('error'); return; }
+            state.shots.splice(pendingDelete, 1);
+            highlightIdx = null;
+            persistState(); render(); sound('delete');
+            toast(tr('toastDeleted', { n: s.number }), 'success');
+            closeDeleteModal();
+        }
+        $('btn-cancel-delete').addEventListener('click', closeDeleteModal);
+        $('btn-confirm-delete').addEventListener('click', confirmDelete);
+        $('delete-confirm-input').addEventListener('keydown', e => { if (e.key === 'Enter') confirmDelete(); });
+
+        /* ---------- Hard-Reset ---------- */
+        $('btn-hard-reset').addEventListener('click', () => {
+            $('reset-confirm-input').value = '';
+            openM('reset-modal');
+            setTimeout(() => $('reset-confirm-input').focus(), 120);
+        });
+        $('btn-cancel-reset').addEventListener('click', () => closeM('reset-modal'));
+        function executeHardReset() {
+            if ($('reset-confirm-input').value !== 'CONFIRM') { toast(tr('toastConfirm'), 'error'); sound('error'); return; }
+            closeM('reset-modal'); sound('delete');
+            localStorage.removeItem(STORAGE_KEY);
+            state = defaultState(); noteDirty = false; highlightIdx = null;
+            render();
+            setTimeout(() => location.reload(), 600);
+        }
+        $('btn-confirm-reset').addEventListener('click', executeHardReset);
+        $('reset-confirm-input').addEventListener('keydown', e => { if (e.key === 'Enter') executeHardReset(); });
+
+        /* =========================================================
+           Teams, Ranking, Filter
+           ========================================================= */
+        $('teams').addEventListener('click', e => {
+            const vis = e.target.closest('[data-act="team-vis"]');
+            if (vis) {
+                const t = vis.dataset.team, h = state.filters.hiddenTeams;
+                state.filters.hiddenTeams = h.includes(t) ? h.filter(x => x !== t) : [...h, t];
+                persistState(); render(); return;
+            }
+            const card = e.target.closest('.team-card');
+            if (card) { activeTeam = card.dataset.team; renderTeams(); }
+        });
+        $('teams').addEventListener('input', e => {
+            const inp = e.target.closest('[data-team-name]'); if (!inp) return;
+            state.teams[inp.dataset.teamName].name = inp.value.slice(0, 22) || (inp.dataset.teamName === 'a' ? tr('teamA') : tr('teamB'));
+            persistState(); renderRanking();
+        });
+        $('teams').addEventListener('focusin', e => {
+            const inp = e.target.closest('[data-team-name]');
+            if (inp) { activeTeam = inp.dataset.teamName; document.querySelectorAll('.team-card').forEach(c => c.classList.toggle('active', c.dataset.team === activeTeam)); }
+        });
+
+        $('ranking').addEventListener('click', e => {
+            const b = e.target.closest('button[data-act]'); if (!b) return;
+            const k = b.dataset.k, f = state.filters;
+            if (b.dataset.act === 'solo') {
+                f.showOnly = (f.showOnly === k) ? null : k;
+                f.hiddenNumbers = [];
+            } else {
+                f.hiddenNumbers = f.hiddenNumbers.includes(k) ? f.hiddenNumbers.filter(x => x !== k) : [...f.hiddenNumbers, k];
+                f.showOnly = null;
+            }
+            highlightIdx = null;
+            persistState(); render(); sound('click');
+        });
+
+        $('btn-reset-filter').addEventListener('click', () => {
+            state.filters = { showOnly: null, hiddenNumbers: [], hiddenTeams: [] };
+            persistState(); render(); toast(tr('toastFilter'), 'success');
+        });
+
+        /* ---------- Datum & Halbzeit ---------- */
+        $('meta-date').addEventListener('change', e => {
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(e.target.value)) { e.target.value = state.meta.date; return; }
+            state.meta.date = e.target.value; persistState(); render();
+        });
+        $('meta-half').addEventListener('click', e => {
+            const b = e.target.closest('button'); if (!b || state.settings.readOnly) return;
+            state.meta.half = Number(b.dataset.half); persistState(); render(); sound('click');
+        });
+
+        /* ---------- Notiz ---------- */
+        $('game-note').addEventListener('input', () => { noteDirty = true; });
+        $('btn-save-note').addEventListener('click', () => {
+            state.gameNote = $('game-note').value.trim();
+            noteDirty = false; persistState(); toast(tr('toastNote'), 'success');
+        });
+        $('note-toolbar').addEventListener('click', e => {
+            const b = e.target.closest('[data-fmt]'); if (!b || state.settings.readOnly) return;
+            const a = b.dataset.fmt, z = b.dataset.end !== undefined ? b.dataset.end : a;
+            const f = $('game-note'), s = f.selectionStart, en = f.selectionEnd, v = f.value;
+            f.value = v.slice(0, s) + a + v.slice(s, en) + z + v.slice(en);
+            f.focus(); f.selectionStart = s + a.length; f.selectionEnd = en + a.length;
+            noteDirty = true; sound('click');
+        });
+
+        /* =========================================================
+           Export / Import (Dateiname passend zur Cloud Library)
+           ========================================================= */
+        $('btn-ro').addEventListener('click', () => {
+            exportReadonly = !exportReadonly;
+            $('btn-ro').classList.toggle('on', exportReadonly);
+            toast(tr(exportReadonly ? 'toastRoOn' : 'toastRoOff'));
+        });
+
+        $('btn-export').addEventListener('click', () => {
+            if (!state.shots.length) { toast(tr('toastNoShots'), 'error'); return; }
+            if (!noteDirty) { /* Notiz ist aktuell */ } else { state.gameNote = $('game-note').value.trim(); noteDirty = false; persistState(); }
+            const out = {
+                shots: state.shots, gameNote: state.gameNote, teams: state.teams, meta: state.meta,
+                filters: { showOnly: null, hiddenNumbers: [], hiddenTeams: [] },
+                settings: { readOnly: exportReadonly }
+            };
+            const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const name = buildFileName();
+            a.href = url; a.download = name;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            sound('success'); toast(tr('toastExported', { f: name }), 'success', 4500);
+        });
+
+        $('btn-import').addEventListener('click', () => $('file-import').click());
+        $('file-import').addEventListener('change', e => {
+            const file = e.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = ev => {
+                try {
+                    const parsed = JSON.parse(ev.target.result);
+                    if (!parsed || !Array.isArray(parsed.shots)) { sound('error'); toast(tr('toastBadFile'), 'error'); return; }
+                    applyImported(parsed, file.name);
+                    sound('success'); toast(tr('toastImported'), 'success');
+                } catch (err) { sound('error'); toast(tr('toastReadErr'), 'error'); }
+                e.target.value = '';
+            };
+            reader.readAsText(file);
+        });
+
+        function applyImported(parsed, fileName) {
+            const next = normalizeState(parsed);
+            if (!parsed.meta && fileName) {                      // Alte Datei: Datum/Halbzeit aus Dateiname
+                const m = parseMetaFromName(fileName);
+                if (m.date) next.meta.date = m.date;
+                if (m.half) next.meta.half = m.half;
+            }
+            state = next; noteDirty = false; highlightIdx = null;
+            persistState(); render();
+        }
+
+        /* =========================================================
+           Cloud Library
+           ========================================================= */
+        let libraryFiles = [];
+        let libraryData = {};   // path -> normalisierter State
+
+        function getLibraryGroup(name) {
+            const m = name.match(/(\d+)-([a-zäöü]+)-(\d{2})/i);
+            return m ? `${parseInt(m[1], 10)}-${m[2].toLowerCase()}-${m[3]}` : 'unbekannt';
+        }
+        function getLibraryHalf(name) { const m = name.match(/halb(\d+)/i); return m ? parseInt(m[1], 10) : 0; }
+        function groupTime(g) {
+            const m = g.match(/^(\d+)-([a-zäöü]+)-(\d{2})$/); if (!m) return 0;
+            const mi = MONTH_ALIASES[m[2]]; if (mi === undefined) return 0;
+            return new Date(2000 + Number(m[3]), mi, Number(m[1])).getTime();
+        }
+
+        async function openLibrary() {
+            openM('library-modal');
+            $('library-search').value = '';
+            const status = $('library-status');
+            status.textContent = tr('loadList');
+            $('library-list').innerHTML = '';
+            libraryData = {};
+            try {
+                const r = await fetch(`https://api.github.com/repos/${GITHUB_LIBRARY.owner}/${GITHUB_LIBRARY.repo}/git/trees/${GITHUB_LIBRARY.branch}?recursive=1`);
+                if (!r.ok) throw new Error(`GitHub ${r.status}`);
+                const data = await r.json();
+                libraryFiles = (data.tree || []).filter(i => i.type === 'blob' && i.path.endsWith('.json'))
+                    .map(i => ({ path: i.path, name: i.path.split('/').pop() }));
+                status.textContent = tr('loadGames');
+                await Promise.all(libraryFiles.map(async f => {
+                    try {
+                        const rr = await fetch(rawUrl(f.path));
+                        libraryData[f.path] = rr.ok ? normalizeState(await rr.json()) : null;
+                    } catch (e) { libraryData[f.path] = null; }
+                }));
+                status.textContent = tr('filesFound', { n: libraryFiles.length });
+                renderLibraryList();
+            } catch (err) {
+                libraryFiles = [];
+                status.textContent = '';
+                toast(tr('toastLibErr'), 'error');
+            }
+        }
+        const rawUrl = path => `https://raw.githubusercontent.com/${GITHUB_LIBRARY.owner}/${GITHUB_LIBRARY.repo}/${GITHUB_LIBRARY.branch}/${path}`;
+
+        function renderLibraryList() {
+            const q = $('library-search').value.trim().toLowerCase();
+            const box = $('library-list');
+            const files = libraryFiles.filter(f => f.name.toLowerCase().includes(q));
+            if (!files.length) { box.innerHTML = `<p class="empty">${tr('noFiles')}</p>`; return; }
+
+            const groups = {};
+            files.forEach(f => (groups[getLibraryGroup(f.name)] ||= []).push(f));
+            const keys = Object.keys(groups).sort((a, b) => groupTime(b) - groupTime(a));
+            const goalsOf = (d, t) => d ? d.shots.filter(s => s.team === t && s.outcome !== 'saved') : [];
+
+            box.innerHTML = keys.map(g => {
+                const list = groups[g].sort((a, b) => getLibraryHalf(a.name) - getLibraryHalf(b.name));
+                const acc = { a: [], b: [] };
+                let names = null;
+                list.forEach(f => {
+                    const d = libraryData[f.path]; if (!d) return;
+                    if (!names) names = { a: d.teams.a.name, b: d.teams.b.name };
+                    acc.a.push(...goalsOf(d, 'a')); acc.b.push(...goalsOf(d, 'b'));
+                });
+                names = names || { a: tr('teamA'), b: tr('teamB') };
+                const nth = (arr, n) => arr.length >= n ? esc(arr[n - 1].number) : '–';
+                const teamLine = t => `<div class="g-line t-${t}"><span class="dot"></span>${esc(names[t])}: ${tr('g30')} ${nth(acc[t], 30)}, ${tr('g40')} ${nth(acc[t], 40)}</div>`;
+                const items = list.map(f => {
+                    const d = libraryData[f.path];
+                    const ga = goalsOf(d, 'a').length, gb = goalsOf(d, 'b').length;
+                    return `<div class="lib-item">
+                        <button class="lib-load" data-path="${esc(f.path)}"><span class="n">${esc(f.name)}</span><span class="m">${tr('half')} ${getLibraryHalf(f.name)}, ${ga} : ${gb}</span></button>
+                        <button class="icon-btn sm lib-seq" data-path="${esc(f.path)}" title="${tr('tSeq')}" style="height:auto">${icon('list')}</button>
+                    </div>`;
+                }).join('');
+                return `<div class="lib-group"><h3>${esc(g)}, ${acc.a.length + acc.b.length} ${tr('goals')}</h3>${teamLine('a')}${teamLine('b')}<div class="lib-items">${items}</div></div>`;
+            }).join('');
+        }
+
+        $('library-list').addEventListener('click', e => {
+            const seq = e.target.closest('.lib-seq');
+            if (seq) { openSequence(seq.dataset.path); return; }
+            const load = e.target.closest('.lib-load');
+            if (load) loadLibraryFile(load.dataset.path);
+        });
+        $('library-search').addEventListener('input', renderLibraryList);
+        $('btn-lib').addEventListener('click', openLibrary);
+        $('btn-close-lib').addEventListener('click', () => closeM('library-modal'));
+
+        async function loadLibraryFile(path) {
+            const name = path.split('/').pop();
+            closeM('library-modal');
+            $('loading-overlay').classList.add('active');
+            try {
+                const r = await fetch(rawUrl(path));
+                if (!r.ok) throw new Error(r.status);
+                applyImported(await r.json(), name);
+                sound('success'); toast(tr('toastLoaded', { f: name }), 'success');
+            } catch (err) {
+                toast(tr('toastLibErr'), 'error');
+            } finally {
+                $('loading-overlay').classList.remove('active');
+            }
+        }
+
+        function openSequence(path) {
+            const d = libraryData[path];
+            if (!d || !d.shots.length) return;
+            $('sequence-title').textContent = `${tr('seqTitle')}: ${path.split('/').pop()}`;
+            $('sequence-list').innerHTML = d.shots.map((s, i) => `
+                <div class="seq-row t-${s.team}">
+                    <span class="idx">${i + 1}</span>
+                    <span class="dot"></span>
+                    <span class="nr">${esc(s.number)}</span>
+                    ${s.origin ? icon('curve') : ''}
+                    ${icon(s.outcome === 'saved' ? 'shield' : 'ball')}
+                    <span class="tm">${esc(s.time || '')}</span>
+                </div>`).join('');
+            openM('sequence-modal');
+        }
+        $('btn-close-seq').addEventListener('click', () => closeM('sequence-modal'));
+
+        /* =========================================================
+           Theme, Sprache, Login
+           ========================================================= */
+        $('btn-theme').addEventListener('click', () => {
+            const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const next = dark ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('handball_theme', next);
+            sound('click');
+        });
+        $('btn-lang').addEventListener('click', () => {
+            currentLang = currentLang === 'de' ? 'en' : 'de';
+            localStorage.setItem('handball_lang', currentLang);
+            applyLang(); render(); sound('click');
+        });
+
+        const pinInput = $('pin-input');
+        pinInput.addEventListener('input', e => {
+            if (e.target.value === CORRECT_PIN) {
+                $('login-screen').style.display = 'none';
+                $('dashboard').classList.add('active');
+                pinInput.blur();
+                render();
+            }
+        });
+
+        // Modals per Klick auf den Hintergrund schließen (nur ungefährliche)
+        ['library-modal', 'sequence-modal'].forEach(id =>
+            $(id).addEventListener('click', e => { if (e.target === $(id)) closeM(id); }));
+
+        window.addEventListener('load', () => {
+            loadState();
+            buildTeamCards();
+            applyLang();
+            pinInput.focus();
+        });
     </script>
 </body>
 
